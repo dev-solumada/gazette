@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/style.css">
+		<link rel="stylesheet" href="/bstyle.css">
+        <title>XML - GAZETTE</title>
+    </head>
+    <body>
+        <div class="container-fluid">
+			<!-- <fieldset class="bg-white"> -->
+				<div class="row top-bar">
+					<div class="col-md-12">
+						<span class="form-legend text-primary">Formulaire Gazette</span>
+						<div class="float-end">
+							<div class="float-end text-end">
+								<select id="pdfdone" class="border">
+									<option value="" class="text-muted">Click here...</option>
+									<% dones.forEach(function(done) { %>
+										<option value='<%= done.name %>'><%= done.name %> treated by <%= done.treated_by %> </option>
+									  <% }); %>
+								</select>
+							</div>
+							<div class="float-end text-end mx-3">
+								<label for="pdfdone"><strong class="text-primary">Finished documents:</strong></label>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-12 px-1">
+						<fieldset style="border-color:rgb(185, 56, 56); " class="pb-0">
+							<legend><label class="text-danger">Warnings</label></legend>
+							<!-- Afficher les avertissements ici -->
+							<ul id="warnings-ul" class="row py-0">
+								<!-- list of warnings -->
+							</ul>
+						</fieldset>
+					</div>
+				</div>
+				<!-- Main row -->
+				<div class="row">
+					<!-- INPUT FIELD // GAUCHE -->
+					<div class="col-xl-6" id="left-page">
+						<!-- Identifier -->
+					</div>
+					<!-- PDF FIELD // DROITE -->
+					<div class="col-xl-6">
+						<div class="form-group my-2">
+							<input type="file" accept="application/pdf" class="form-control" id="pdf" aria-describedby="helpId" placeholder="" onchange="uploadPDF()">
+							<!-- <button class="btn btn-dark float-start"><B class="text-white">Next document</B></button>
+							<button class="btn btn-danger float-end"><B class="text-white">Mark as done</B></button> -->
+						</div>
+						<object id="show" data="/pdf_paceholder.png" style="width:100% !important; height: 860px !important;zoom: 0% !important;" >
+							Your browser does not support PDFs
+						</object>
+					</div>
+				</div>
+			<!-- </fieldset> -->
+		</div>
+	<!-- </form> -->
+		 
+	<script src="/jquery-latest.js"></script>
+	<script src="/table.js" type="text/javascript"></script>
+	<script src="/main.js" type="text/javascript"></script>
+	<script src="/index.js" type="text/javascript"></script>
+	<script src="/jszip.min.js" type="text/javascript"></script>
+    <script>
+        openFile('/page1.html');
+		callScripts();
+		// avertir l'utilisateur lors de l'actualisation de la page
+		// window.onbeforeunload = function(e) {
+		// 	return "Do you want to exit this page?";
+		// };
+		localStorage.clear();
+    </script>
+    </body>
+</html>
