@@ -5,11 +5,17 @@ const bodyParser = require("body-parser");
 const route = require("./public/route.js");
 const PORT = process.env.PORT || 8080;
 const methodOverride = require("method-override");
+const expsession = require('express-session');
 
 app.use(methodOverride("X-HTTP-Method"));
 app.use(methodOverride("X-HTTP-Method-Override"));
 app.use(methodOverride("X-Method-Override"));
 app.use(methodOverride("_method"));
+app.use(expsession({
+  secret: '2C44-4D44-WppQ38S',
+  resave: true,
+  saveUninitialized: true
+}));
 
 // Fichier static a utiliser
 app.use(express.static("public"));
