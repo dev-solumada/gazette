@@ -192,3 +192,84 @@ fieldset {
         font-size: 45px;
     }
 }
+
+.login-container {
+    width: 400px;
+    height: auto;
+    padding: 30px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
+    position: absolute;
+    transform: translate(-50%, -50%);
+    top: 50%;
+    left: 50%;
+}
+.login-input {
+    padding: 10px !important;
+    box-shadow: inset 0px 0px 3px  rgba(0, 0, 0, 0.4);
+}
+.login-input:focus {
+    outline: 1px solid #46449B;
+}
+.label-page {
+    font-weight: bold;
+    font-family: 'fantasy';
+    font-size: 12px;
+}
+.login-btn2 {
+    padding: 6px 8px;
+    width:100%;
+    border-radius: 25px;
+    background-color: #46449B;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.login-btn2:hover {
+    background-color: #2a296b;
+}
+.login-btn {
+    padding: 6px 8px;
+    width:100%;
+    border-radius: 25px;
+    background-color: #449A9B;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.login-btn:hover {
+    background-color: #306f70;
+}
+.signin-btn {
+    padding: 3px 8px;
+}
+.link {
+    color: rgb(43, 144, 226);
+    text-decoration: none;
+}
+.link:hover {
+    color: rgb(73, 144, 202);
+    text-decoration: underline;
+}
+
+a {
+    text-decoration: none;
+    padding: 0;
+}
+.succes {
+    color: rgb(42, 158, 67) !important;
+    transition: all ease 0.3s;
+}
+a {
+    text-decoration: none;
+    padding: 0;
+}
+.profile {
+    border: 1px solid #cfcfcf;
+    border-radius: 5px;
+    white-space: nowrap !important;
+    padding: 6px;
+}
+#pdfdone {
+    width: 50% !important;
+}
+.left-nav {
+    width: 400px;
+}

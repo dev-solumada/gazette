@@ -148,7 +148,13 @@ function previousToPage2() {
 const showWarnings = (input = null, message = '') => {
   let warning_ul = document.getElementById('warnings-ul');
   if (input === null && message === '') {
-    warning_ul.innerHTML = '';
+    if (document.getElementById("already").value == ""){
+      warning_ul.innerHTML = '';
+    }
+    else{
+      warning_ul.innerHTML = "<li style ='font-weight:500;' class='col-md-6 succes' >"+ document.getElementById("already").value+"</li>";
+    }
+   
     for (const i of document.querySelectorAll('.select')) {
       // supprimer la class invalid
       i.classList.remove('is-invalid');
@@ -207,7 +213,7 @@ function downloadXML() {
     // country
     let GAZC = localStorage.getItem('GAZC');
     // chapter
-    let chapter = localStorage.getItem('chap');
+    let chapter = localStorage.getItem('chap') + " V"+ localStorage.getItem("version");
     // gazette number
     let GAZN = localStorage.getItem('GAZN');
     // gazette date
@@ -231,7 +237,7 @@ function sendRequest(url,filename) {
           window.location = "/";
 			  }
 			};
-			http.send("filename=" + filename );
+			http.send("filename=" + filename +"&version="+localStorage.getItem("version"));
 		  
     }
 

@@ -24,7 +24,7 @@ function fromToXml(form){
       var el=document.createElement("ELEMENT");
       if (inputs[i].name && !inputs[i].disabled){
         el.setAttribute("name",inputs[i].name);
-        el.setAttribute("value",new String(inputs[i].value));
+        el.setAttribute("value",inputs[i].value);
         xmldata.push(el.outerHTML);
       }
     }
@@ -154,13 +154,7 @@ function main() {
   if (chapId === "APP") {
     // afficher la page pour application
     switch (chap.toUpperCase()) {
-      case "APP_E" :
-        if (pays.toUpperCase() === 'TN') 
-          disableFields(['111', '171', '176', '180', '186', '200', '527', '591', '732', '770'])
-        else 
-          disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "300", "527", "571", "591", "732", "770"]);
-        break;
-      case "APP_T":
+      case "APP_T" || "APP_E":
         disableFields([
           "111",
           "141",
@@ -228,6 +222,8 @@ function main() {
   }
   // champ pour renewal.html
   else if (chapId === "REN") {
+    // Afficher renewal page
+    // openFile('plateforme/renewal.html');
     // disable fields for nice
     switch (pays) {
       case "DZ": // DZ
@@ -282,7 +278,6 @@ function main() {
           "180",
           "186",
           "200",
-          "220",
           "300",
           "510",
           "527",
@@ -343,7 +338,6 @@ function main() {
           "111",
           "141",
           "151",
-          //"156",
           "171",
           "176",
           "186",
@@ -659,6 +653,7 @@ function main() {
             "180",
             "186",
             "200",
+            "210",
             "300",
             "527",
             "540",
@@ -681,6 +676,7 @@ function main() {
             "180",
             "186",
             "200",
+            "210",
             "300",
             "510",
             "527",
@@ -704,6 +700,7 @@ function main() {
             "180",
             "186",
             "200",
+            "210",
             "300",
             "527",
             "541",
@@ -725,6 +722,7 @@ function main() {
             "180",
             "186",
             "200",
+            "210",
             "300",
             "527",
             "540",
@@ -734,6 +732,7 @@ function main() {
             "731",
             "740",
             "750",
+            "770",
           ]);
 
         break;
@@ -900,10 +899,6 @@ function displayAvailableChapters(country = 'DZ') {
 
 //add image screenshoot
 window.addEventListener("paste", e => {
-  const pays = localStorage.getItem('GAZC');
-  const chap = localStorage.getItem('chap');
- 
-  if (pays === 'TN' && chap === 'REN') return;
   // get current image and input file
   const pageId = parseInt(localStorage.getItem('current-pageId')) || 0;
   if (e.clipboardData.files.length > 0) {
@@ -914,14 +909,13 @@ window.addEventListener("paste", e => {
         setPreviewImage(e.clipboardData.files[0])
       }
   }
-
   function setPreviewImage(file) {
       const fileReader = new FileReader();
 
       fileReader.readAsDataURL(file);
       fileReader.onload = () => {
-        document.querySelectorAll('.image')[pageId].src = fileReader.result;
-        document.querySelectorAll(".imagePath")[pageId].value = fileReader.result;
+          document.querySelectorAll('.image')[pageId].src = fileReader.result;
+          document.querySelectorAll(".imagePath")[pageId].value = fileReader.result;
       }
   }
 
