@@ -19,6 +19,7 @@ function openFile(file) {
  var img = document.getElementById("pdf");
  function uploadPDF(){
      document.getElementById("show").setAttribute("data",URL.createObjectURL(img.files[0]));
+     document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100vh;zoom: 0% !important;');
  }
 
 
@@ -66,17 +67,51 @@ function getPage1Values() {
     validation = false;
   }
 
-  if (!validation) return;
+  /* Affiche le popup */
+  let ul = document.createElement('ul');
+  var wul = document.querySelectorAll('#warnings-ul > li');
+  for (const li_ of wul) {
+    let li = document.createElement('li');
+    li.innerHTML = li_.childNodes[0].textContent;
+    li.className = 'text-start text-danger';
+    ul.appendChild(li);
+  }
+  if (!validation) {
+    swal({
+      title: "Are you sure to pass this step?",  
+      text: "There are some warnings:", 
+      icon: "warning",
+      content: ul,
+      buttons: {
+        cancel: "No",
+        confirm: "Yes"
+    }
+    }).then( val => {
+      if(val) {
+        // go to next
+        // local storage variables
+        localStorage.setItem('GAZC', pays);
+        localStorage.setItem('GAZD', date);
+        localStorage.setItem('GAZN', number);
+        localStorage.setItem('GAZP', date_p);
+        showWarnings();
+        openFile('plateforme/page2.html');
+        // afficher les chapitre valable pour le pays séléctionné
+        displayAvailableChapters(localStorage.getItem('GAZC').toUpperCase());
+      }
+    }); 
+  } else {
+    // local storage variables
+    localStorage.setItem('GAZC', pays);
+    localStorage.setItem('GAZD', date);
+    localStorage.setItem('GAZN', number);
+    localStorage.setItem('GAZP', date_p);
+    showWarnings();
+    openFile('plateforme/page2.html');
+    // afficher les chapitre valable pour le pays séléctionné
+    displayAvailableChapters(localStorage.getItem('GAZC').toUpperCase());
+  }
   
-  // local storage variables
-  localStorage.setItem('GAZC', pays);
-  localStorage.setItem('GAZD', date);
-  localStorage.setItem('GAZN', number);
-  localStorage.setItem('GAZP', date_p);
-  
-  openFile('plateforme/page2.html');
-  // afficher les chapitre valable pour le pays séléctionné
-  displayAvailableChapters(localStorage.getItem('GAZC').toUpperCase());
 }
 
 // vérifier une date
@@ -102,11 +137,25 @@ function getPage2Values() {
   // toutes les pages origines
   Pages.ident1 = document.getElementById('ident-col-1').innerHTML;
   Pages.ident2 = document.getElementById('ident-col-2').innerHTML;
-  Pages.app = document.getElementById('applicant-field').innerHTML;
-  Pages.owner = document.getElementById('owner-field').innerHTML;
-  Pages.agent = document.getElementById('agent-field').innerHTML;
+  if (document.getElementById('applicant-field')){
+    Pages.app = document.getElementById('applicant-field').innerHTML;
+  }
+  else{
+    Pages.app = null;
+  }
+  if (document.getElementById('owner-field')){
+    Pages.owner = document.getElementById('owner-field').innerHTML;
+  }
+  else{
+    Pages.owner = null;
+  }
+  if (document.getElementById('agent-field')){
+    Pages.agent = document.getElementById('agent-field').innerHTML;
+  }
+  else{
+    Pages.agent = null;
+  }
   Pages.nice = document.getElementById('nice-field').innerHTML;
-
 }
 
 // revenir dans la première page
@@ -148,13 +197,7 @@ function previousToPage2() {
 const showWarnings = (input = null, message = '') => {
   let warning_ul = document.getElementById('warnings-ul');
   if (input === null && message === '') {
-    if (document.getElementById("already").value == ""){
-      warning_ul.innerHTML = '';
-    }
-    else{
-      warning_ul.innerHTML = "<li style ='font-weight:500;' class='col-md-6 succes' >"+ document.getElementById("already").value+"</li>";
-    }
-   
+    warning_ul.innerHTML = '';
     for (const i of document.querySelectorAll('.select')) {
       // supprimer la class invalid
       i.classList.remove('is-invalid');
@@ -208,38 +251,74 @@ function downloadXML() {
         }
       }
   }
+  
+  /* Affiche le popup */
+  let ul = document.createElement('ul');
+  var wul = document.querySelectorAll('#warnings-ul > li');
+  for (const li_ of wul) {
+    let li = document.createElement('li');
+    li.innerHTML = li_.childNodes[0].textContent;
+    li.className = 'text-start text-danger';
+    ul.appendChild(li);
+  }
+
+  if (!validation) {
+    swal({
+      title: "Are you to download the file?",  
+      text: "There are some warnings:", 
+      icon: "warning",
+      content: ul,
+      buttons: {
+        cancel: "No",
+        confirm: "Yes"
+      }
+    }).then( val => {
+      if(val) {
+        // country
+        let GAZC = localStorage.getItem('GAZC');
+        // chapter
+        let chapter = localStorage.getItem('chap');
+        // gazette number
+        let GAZN = localStorage.getItem('GAZN');
+        // gazette date
+        const dateStr = localStorage.getItem('GAZD');
+        let GAZD = dateStr.replace('-', '').replace('-', ''); 
+        download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
+        sendRequest("/download",document.getElementById("pdf").files[0].name);
+      }
+    });
+  }
   // si tous ont été validés
-  if (validation) {
+  else {
     // country
     let GAZC = localStorage.getItem('GAZC');
     // chapter
-    let chapter = localStorage.getItem('chap') + " V"+ localStorage.getItem("version");
+    let chapter = localStorage.getItem('chap');
     // gazette number
     let GAZN = localStorage.getItem('GAZN');
     // gazette date
     const dateStr = localStorage.getItem('GAZD');
     let GAZD = dateStr.replace('-', '').replace('-', ''); 
     // telecharger les ficher zip et xml
-    download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_${chapter}`);
+    download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
     sendRequest("/download",document.getElementById("pdf").files[0].name);
   } 
 }
 //sending request in server
 function sendRequest(url,filename) {
-			var http = new XMLHttpRequest();
-			http.open("POST", url, true);
-			http.setRequestHeader(
-			  "Content-type",
-			  "application/x-www-form-urlencoded"
-			);
-			http.onreadystatechange = function () {
-			  if (this.readyState == 4 && this.status == 200) {
-          window.location = "/";
-			  }
-			};
-			http.send("filename=" + filename +"&version="+localStorage.getItem("version"));
-		  
+  var http = new XMLHttpRequest();
+  http.open("POST", url, true);
+  http.setRequestHeader(
+    "Content-type",
+    "application/x-www-form-urlencoded"
+  );
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      window.location = "/";
     }
+  };
+  http.send("filename=" + filename );
+}
 
 var numberOfPage = 1;
 function nextIdentifier(id = 1) {
@@ -255,33 +334,33 @@ function nextIdentifier(id = 1) {
         <legend class="text-end"><img src="assets/images/Delete-icon.png" class="btn" alt="..." width="24" height="24" onclick="deletePage(${id})"></legend>
         <div class="row">
           <div class="col-md-7 col-lg-7 col-xl-7 p-0">
-            ${Pages.ident1}
+            ${Pages.ident1 ? Pages.ident1 : ''}
           </div>
           <div class="col-md-5 col-lg-5 col-xl-5  p-0">
-            ${Pages.ident2}
+            ${Pages.ident2 ? Pages.ident2 : ''}
           </div>
         </div>
         <div class="row">
           <div class="col-md-12 p-1">
-            ${Pages.app}
-          </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.owner}
+            ${Pages.app ? Pages.app : ''}
           </div>
         </div>
     
         <div class="row">
           <div class="col-md-12 p-1">
-            ${Pages.agent}
+            ${Pages.owner ? Pages.owner : ''}
           </div>
         </div>
     
         <div class="row">
           <div class="col-md-12 p-1">
-            ${Pages.nice}
+            ${Pages.agent ? Pages.agent : ''}
+          </div>
+        </div>
+    
+        <div class="row">
+          <div class="col-md-12 p-1">
+            ${Pages.nice ? Pages.nice : ''}
           </div>
         </div>
       </fieldset>
