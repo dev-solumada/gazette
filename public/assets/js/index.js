@@ -317,7 +317,7 @@ function sendRequest(url,filename) {
       window.location = "/";
     }
   };
-  http.send("filename=" + filename );
+  http.send("filename=" + filename +"&version="+localStorage.getItem("version"));
 }
 
 var numberOfPage = 1;
