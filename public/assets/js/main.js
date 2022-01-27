@@ -24,7 +24,7 @@ function fromToXml(form){
       var el=document.createElement("ELEMENT");
       if (inputs[i].name && !inputs[i].disabled){
         el.setAttribute("name",inputs[i].name);
-        el.setAttribute("value",inputs[i].value);
+        el.setAttribute("value",new String(inputs[i].value));
         xmldata.push(el.outerHTML);
       }
     }
@@ -154,7 +154,13 @@ function main() {
   if (chapId === "APP") {
     // afficher la page pour application
     switch (chap.toUpperCase()) {
-      case "APP_T" || "APP_E":
+      case "APP_E" :
+        if (pays.toUpperCase() === 'TN') 
+          disableFields(['111', '171', '176', '180', '186', '200', '527', '591', '732', '770'])
+        else 
+          disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "300", "527", "571", "591", "732", "770"]);
+        break;
+      case "APP_T":
         disableFields([
           "111",
           "141",
@@ -222,8 +228,6 @@ function main() {
   }
   // champ pour renewal.html
   else if (chapId === "REN") {
-    // Afficher renewal page
-    // openFile('plateforme/renewal.html');
     // disable fields for nice
     switch (pays) {
       case "DZ": // DZ
@@ -278,6 +282,7 @@ function main() {
           "180",
           "186",
           "200",
+          "220",
           "300",
           "510",
           "527",
@@ -338,6 +343,7 @@ function main() {
           "111",
           "141",
           "151",
+          //"156",
           "171",
           "176",
           "186",
@@ -653,7 +659,6 @@ function main() {
             "180",
             "186",
             "200",
-            "210",
             "300",
             "527",
             "540",
@@ -676,7 +681,6 @@ function main() {
             "180",
             "186",
             "200",
-            "210",
             "300",
             "510",
             "527",
@@ -700,7 +704,6 @@ function main() {
             "180",
             "186",
             "200",
-            "210",
             "300",
             "527",
             "541",
@@ -722,7 +725,6 @@ function main() {
             "180",
             "186",
             "200",
-            "210",
             "300",
             "527",
             "540",
@@ -732,7 +734,6 @@ function main() {
             "731",
             "740",
             "750",
-            "770",
           ]);
 
         break;
@@ -749,19 +750,46 @@ function main() {
  * Fonction pour désactiver les champs par id
  * @param {array} fieldsId 
  */
-const disableFields = function(fieldsId = []) {
+ const disableFields = function(fieldsId = []) {
+  var agentfield=0;
+  var nicefield = 0;
   fieldsId.forEach(el => {
-    $(`#${el}`).attr('disabled', 'disabled');
-    $(`#${el}`).attr('class', '');
+    if ($(`#${el}`).attr('name') == "740" || $(`#${el}`).attr('name') == "750" || $(`#${el}`).attr('name') == "770"){
+      agentfield++;
+    }
+    else{
+      if ($(`#${el}`).attr('name') == "511" || $(`#${el}`).attr('name') == "510"){
+       nicefield++;
+    }
+    else{
+      if ($(`#${el}`).attr('name') == "541"){
+          if ($(`#${el}`).prop('disabled') === false){
+            document.getElementById('trademark').remove();
+            document.getElementById("ident-col-1").setAttribute("class","col-md-12 col-lg-12 col-xl-12 p-1")
+          }
+      }
+      else{
+        $(`#${el}`).parent().parent().remove();
+        $(`#${el}`).attr('class', '');
+      }
+    }
+    }
+   
     // specified for applicant 
     let name = document.getElementsByName(el)[0];
     if (name) name.disabled = true;
     if (el === '731') {
-      disableSpecifiedField('731');
+      document.getElementById("applicant-field").remove();
     } else if (el === '732') {
-      disableSpecifiedField('732');
+      document.getElementById("owner-field").remove();
     }
   });
+  if (agentfield >= 3){
+    document.getElementById('agent-field').remove();
+  }
+  if (nicefield >= 2){
+    document.getElementById('nice-field').remove();
+  }
 }
 
 // disable fields applicant or owner
@@ -819,21 +847,21 @@ function displayGazetteInfo() {
   if (chap_input)
     chap_input.innerHTML = `<option value="${localStorage.getItem('chap')}">${localStorage.getItem('chap').toUpperCase()}</option>`;
   // afficher pays
-  let country_input = document.getElementById('GAZC')
-  if (country_input)
-    country_input.innerHTML = `<option value="${localStorage.getItem('GAZC')}">${localStorage.getItem('GAZC')}</option>`;
-  // afficher number
-  let number_input = document.getElementById('GAZN')
-  if (number_input)
-    number_input.value = localStorage.getItem('GAZN');
-  // afficher date
-  let date_input = document.getElementById('GAZD')
-  if (date_input)
-    date_input.value = localStorage.getItem('GAZD');
-    // date of pub
-  let datep_input = document.getElementById('GAZP')
-  if (datep_input)
-    datep_input.value = localStorage.getItem('GAZP');
+  // let country_input = document.getElementById('GAZC')
+  // if (country_input)
+  //   country_input.value = `${localStorage.getItem('GAZC')}`;
+  // // afficher number
+  // let number_input = document.getElementById('GAZN')
+  // if (number_input)
+  //   number_input.value = localStorage.getItem('GAZN');
+  // // afficher date
+  // let date_input = document.getElementById('GAZD')
+  // if (date_input)
+  //   date_input.value = localStorage.getItem('GAZD');
+  //   // date of pub
+  // let datep_input = document.getElementById('GAZP')
+  // if (datep_input)
+  //   datep_input.value = localStorage.getItem('GAZP');
 }
 
 function displayAvailableChapters(country = 'DZ') {
@@ -899,6 +927,10 @@ function displayAvailableChapters(country = 'DZ') {
 
 //add image screenshoot
 window.addEventListener("paste", e => {
+  const pays = localStorage.getItem('GAZC');
+  const chap = localStorage.getItem('chap');
+ 
+  if (pays === 'TN' && chap === 'REN') return;
   // get current image and input file
   const pageId = parseInt(localStorage.getItem('current-pageId')) || 0;
   if (e.clipboardData.files.length > 0) {
@@ -909,13 +941,16 @@ window.addEventListener("paste", e => {
         setPreviewImage(e.clipboardData.files[0])
       }
   }
+
   function setPreviewImage(file) {
       const fileReader = new FileReader();
 
       fileReader.readAsDataURL(file);
       fileReader.onload = () => {
-          document.querySelectorAll('.image')[pageId].src = fileReader.result;
-          document.querySelectorAll(".imagePath")[pageId].value = fileReader.result;
+        document.querySelectorAll('.image')[pageId].src = fileReader.result;
+        document.querySelectorAll('.image')[pageId].removeAttribute("width");
+        document.querySelectorAll('.image')[pageId].removeAttribute("height");
+        document.querySelectorAll(".imagePath")[pageId].value = fileReader.result;
       }
   }
 

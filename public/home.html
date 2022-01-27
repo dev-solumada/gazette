@@ -10,29 +10,21 @@
     </head>
     <body>
         <div class="container-fluid">
+			<!-- <fieldset class="bg-white"> -->
 				<div class="row top-bar">
 					<div class="col-md-12">
-						<span class="form-legend text-primary float-start">Formulaire Gazette</span>
-						<div class="float-end left-nav">
-							<div>
-								<div>
-									<span>
-										<label for="pdfdone"><strong class="text-primary">Finished documents:</strong></label>
-									</span>
-									<select id="pdfdone" class="border float-end">
-										<option value="" class="text-muted">Show here...</option>
-										<% dones.forEach(function(done) { %>
-											<option value='<%= done.name %>'><%= done.name %> treated by <%= done.treated_by %> </option>
-										  <% }); %>
-									</select>
-								</div>
+						<span class="form-legend text-primary">Formulaire Gazette</span>
+						<div class="float-end">
+							<div class="float-end text-end">
+								<select id="pdfdone" class="border">
+									<option value="" class="text-muted">Click here...</option>
+									<% dones.forEach(function(done) { %>
+										<option value='<%= done.name %>'><%= done.name %> treated by <%= done.treated_by %> </option>
+									  <% }); %>
+								</select>
 							</div>
-							<br>
-							<div>
-								<div class="profile">
-									<span><label><b><%= email %></b></label></span>
-									<button class="btn btn-danger float-end" onclick="logout()"><B class="text-white ">Logout</B></button>
-								</div>
+							<div class="float-end text-end mx-3">
+								<label for="pdfdone"><strong class="text-primary">Finished documents:</strong></label>
 							</div>
 						</div>
 					</div>
@@ -45,7 +37,6 @@
 							<!-- Afficher les avertissements ici -->
 							<ul id="warnings-ul" class="row py-0">
 								<!-- list of warnings -->
-								
 							</ul>
 							<input type="hidden" id="already" value="">
 						</fieldset>
@@ -64,7 +55,7 @@
 							<!-- <button class="btn btn-dark float-start"><B class="text-white">Next document</B></button>
 							<button class="btn btn-danger float-end"><B class="text-white">Mark as done</B></button> -->
 						</div>
-						<object id="show" data="/pdf_paceholder.png" style="width:100% !important; height: 860px !important;zoom: 0% !important;" >
+						<object id="show" data="/pdf_paceholder.png" style="width:100% !important;zoom: 0% !important;" >
 							Your browser does not support PDFs
 						</object>
 					</div>
@@ -89,8 +80,10 @@
 		localStorage.clear();
 		var indice = 0;
 		var fileversion = "<%= version %>".split(",");
+
 		var filesDone = "<%= bdfls %>".split(",");
 		document.getElementById("pdf").addEventListener("change", () =>{
+			
 			
 			var breaks = false;
 		filesDone.forEach(function (d){
@@ -122,20 +115,6 @@
 			
 		})
 		})
-		function logout() {
-			swal({
-			title: "Are you sure to disconnect?",
-			text: "Your session will be closed",
-			icon: "warning",
-			buttons: true,
-			dangerMode: true,
-			})
-			.then((willDelete) => {
-				if (willDelete) {
-					window.location.href = '/logout';
-				}
-			});
-		}
     </script>
     </body>
 </html>
