@@ -153,7 +153,9 @@ function main() {
   let pays = localStorage.getItem('GAZC');
   let chap = localStorage.getItem('chap');
   let chapId = chap.toUpperCase().split('_')[0];
-  
+  if (chapId.includes("APP")){
+    disableFields(["111","141","151","156","171","176","180","186",]);
+  }
   // functions 
   callScripts();
   tableScript();
@@ -179,8 +181,7 @@ function main() {
     else{
       if ($(`#${el}`).attr('name') == "541"){
           if ($(`#${el}`).prop('disabled') === false){
-            document.getElementById('trademark').remove();
-            document.getElementById("ident-col-1").setAttribute("class","col-md-12 col-lg-12 col-xl-12 p-1")
+      
           }
       }
       else{
@@ -199,12 +200,6 @@ function main() {
       document.getElementById("owner-field").remove();
     }
   });
-  if (agentfield >= 3){
-    document.getElementById('agent-field').remove();
-  }
-  if (nicefield >= 2){
-    document.getElementById('nice-field').remove();
-  }
 }
 
 // disable fields applicant or owner
@@ -259,8 +254,11 @@ function callScripts() {
 function displayGazetteInfo() {
   // chapitre
   let chap_input = document.getElementById('chapter');
-  if (chap_input)
+  if (chap_input){
     chap_input.innerHTML = `<option value="${localStorage.getItem('chap')}">${localStorage.getItem('chap').toUpperCase()}</option>`;
+    document.getElementById("chapters").value = localStorage.getItem('chap');
+  }
+    
   // afficher pays
   // let country_input = document.getElementById('GAZC')
   // if (country_input)
@@ -348,18 +346,21 @@ function displayAvailableChapters(country = 'DZ') {
 function displayAvailableChaptersForNext(activeChapter, country) {
   var obj = getAvailableChapter(country);
   // création d'élément et affichage des chapitres
-  let chapter_select = document.querySelectorAll('.nextchap')[Array.from(document.forms).indexOf(getLastForm())];
+  let chapter_select = document.getElementById('nextchapterid');
   chapter_select.innerHTML = '<option value=""></option>';
   Object.keys(obj).forEach(key => {
     let optgroup = document.createElement('optgroup');
     optgroup.label = key;
     obj[key].forEach(value => {
+      if (value !== activeChapter) {
         let option = document.createElement('option');
         option.value = value;
         option.textContent = value;
         optgroup.append(option);
+      }
     });
-    chapter_select.appendChild(optgroup);
+    if (optgroup.childElementCount > 0)
+      chapter_select.appendChild(optgroup);
   });
 }
 

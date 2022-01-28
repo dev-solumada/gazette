@@ -13,28 +13,6 @@ function openFile(file) {
   f.send(null);
 }
 
-
-// fonciton pour ajouter un nouveau page
-function appendFile(file) {
-  var f = new XMLHttpRequest();
-  f.open("GET", file, false);
-  f.onreadystatechange = function () {
-    if(f.readyState === 4) {
-        if(f.status === 200 || f.status == 0) {
-          var res= f.responseText;
-          document.getElementById('left-page').innerHTML += res;
-          window.scrollTo(0, 0);
-        }
-    }
-  }
-  f.send(null);
-}
-
-// dernier forme sur la page
-function getLastForm() {
-  return document.forms[document.forms.length - 1];
-}
-
 /**
  * UPLOAD PDF
  */
@@ -178,39 +156,17 @@ function getPage2Values() {
     Pages.agent = null;
   }
   Pages.nice = document.getElementById('nice-field').innerHTML;
+  if (document.getElementById('powner-field')){
+    Pages.powner = document.getElementById('powner-field').innerHTML;
+  }
+  else{
+    Pages.powner = null;
+  }
 
+  alert('go')
   // afficher les chapitres sur next chapter
   displayAvailableChaptersForNext(chap, localStorage.getItem('GAZC').toUpperCase());
 
-  // donner une classe à la prémiere forme
-  document.forms[0].id = chap;
-  // action sur choisir nextchapter
-  const nextchap_select = document.querySelectorAll('.nextchap')[0];
-  nextchap_select.addEventListener('change', (e) => {
-    g(e.target);
-  });
-
-}
-
-function g(nextchap_select) {
-  let chap_field = document.getElementById(nextchap_select.value);
-    // cacher tous les form
-    for (const form of document.forms)
-     form.classList.add('hidden-page');
-    // si la page existe
-    if (chap_field) {
-      chap_field.classList.remove('hidden-page');
-    } else {
-      // si la page n'éxiste pas, on va donner un id
-      appendFile('plateforme/page3.html');
-      getLastForm().id = nextchap_select.value;
-      chap_field = document.getElementById(nextchap_select.value);
-      chap_field.classList.remove('hidden-page');
-      displayAvailableChaptersForNext(nextchap_select.value, localStorage.getItem('GAZC').toUpperCase());
-      document.querySelectorAll('.nextchap')[Array.from(document.forms).indexOf(getLastForm())].addEventListener('change', (e) => {
-        g(e.target);
-      })
-    }
 }
 
 // revenir dans la première page
@@ -396,81 +352,104 @@ function sendRequest(url,filename) {
 }
 
 var numberOfPage = 1;
-function nextIdentifier(id = 1) {
+function nextIdentifier(id = 1,e) {
   if (Object.keys(Pages).length === 0) return;
   id = parseInt(id);
   const prevId = id - 1;
-  const pageField = document.getElementById('ident-page-'+ prevId);
   // elements à ajouter
-  const page = `
-  <div class="row mt-0">
-    <div class="col-12 p-1">
-      <fieldset id="ident-${id}" class="">
-        <legend class="text-end"><img src="assets/images/Delete-icon.png" class="btn" alt="..." width="24" height="24" onclick="deletePage(${id})"></legend>
-        <div class="row">
-          <div class="col-md-7 col-lg-7 col-xl-7 p-0">
-            ${Pages.ident1 ? Pages.ident1 : ''}
+  // cacher le prev page
+  if (e === "add"){
+
+    const pageField = document.getElementById('ident-page-'+ prevId);
+    pageField.classList.add('hidden-page');
+    const page = `
+    <div class="row mt-0">
+      <div class="col-12 p-1">
+        <fieldset id="ident-${id}" class="">
+          <legend class="text-end"><img src="assets/images/Delete-icon.png" class="btn" alt="..." width="24" height="24" onclick="deletePage(${id})"></legend>
+          <div class="row">
+            <div class="col-md-7 col-lg-7 col-xl-7 p-0">
+              ${Pages.ident1 ? Pages.ident1 : ''}
+            </div>
+            <div class="col-md-5 col-lg-5 col-xl-5  p-0">
+              ${Pages.ident2 ? Pages.ident2 : ''}
+            </div>
           </div>
-          <div class="col-md-5 col-lg-5 col-xl-5  p-0">
-            ${Pages.ident2 ? Pages.ident2 : ''}
+          <div class="row">
+            <div class="col-md-12 p-1">
+              ${Pages.app ? Pages.app : ''}
+            </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.app ? Pages.app : ''}
+      
+          <div class="row">
+            <div class="col-md-12 p-1">
+              ${Pages.owner ? Pages.owner : ''}
+            </div>
           </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.owner ? Pages.owner : ''}
+      
+          <div class="row">
+            <div class="col-md-12 p-1">
+              ${Pages.agent ? Pages.agent : ''}
+            </div>
           </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.agent ? Pages.agent : ''}
+      
+          <div class="row">
+            <div class="col-md-12 p-1">
+              ${Pages.nice ? Pages.nice : ''}
+            </div>
           </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.nice ? Pages.nice : ''}
+
+          <div class="row">
+            <div class="col-md-12 p-1">
+              ${Pages.powner ? Pages.powner : ''}
+            </div>
           </div>
-        </div>
-      </fieldset>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col-md-12 p-1">
-      <!-- Boutton next and previous -->
-      <div class="text-end p-1 mt-2" id="ident-1-button">
-        <small class="float-start text-muted">Number of page: <span id="ident-page-nbr-${id}"></span></small>
-        <button type="button" onclick="prevIdentifier('${id}')" class="btn btn-warning"><B class="text-white">&xlArr; Previous</B></button>
-        <span class="badge bg-dark">${id+1}</span>
-        <button type="button" onclick="nextIdentifier('${id+1}')" class="btn btn-warning"><B class="text-white">Next &xrArr;</B></button>
+        </fieldset>
       </div>
     </div>
-  </div>
-  `;
-  // cacher le prev page
-  pageField.classList.add('hidden-page');
-  const pExist = document.getElementById(`ident-${id}`);
-
-  if (!pExist) {
+    
+    <div class="row">
+      <div class="col-md-12 p-1">
+        <!-- Boutton next and previous -->
+        <div class="text-end p-1 mt-2" id="ident-1-button">
+          <small class="float-start text-muted">Number of page: <span id="ident-page-nbr-${id}"></span></small>
+          <button type="button" onclick="prevIdentifier('${id}')" class="btn btn-warning"><B class="text-white">&xlArr; Previous</B></button>
+          <span class="badge bg-dark">${id+1}</span>
+          <button type="button" onclick="nextIdentifier('${id+1}','next')" class="btn btn-warning"><B class="text-white">Next &xrArr;</B></button>
+          <button type="button" style="display: none;"  name="addpage" onclick="nextIdentifier('${id+1}','add')" class="btn btn-success"><B class="text-white">Add Page &xrArr;</B></button>
+        </div>
+      </div>
+    </div>
+    `;
     const div = document.createElement('div');
     div.id = 'ident-page-'+id;
     div.className = 'ident-pages';
     // page à remplir
     div.innerHTML += page;
     pageField.after(div);
-    numberOfPage += 1;
-    // document.querySelectorAll('.image')[id].src = 'assets/images/placeholder.png';
-  } else {
-    const p = document.getElementById('ident-page-'+id);
-    if (p) p.classList.remove('hidden-page');
+    document.getElementsByName("addpage")[0].setAttribute("style","display:none;");
+    for (i=0;i<document.getElementsByName("addpage").length - 1;i++){
+      document.getElementsByName("addpage")[i].style.display = "none";
+    };
+    document.getElementsByName("addpage")[document.getElementsByName("addpage").length - 1].setAttribute("style","display:block;");
+    numberOfPage += 1 ;
   }
+  else{
+    if (document.getElementById('ident-page-'+id)){
+      const pageField = document.getElementById('ident-page-'+ prevId);
+      pageField.classList.add('hidden-page');
+        // document.querySelectorAll('.image')[id].src = 'assets/images/placeholder.png';
+     const p = document.getElementById('ident-page-'+id);
+     if (p) p.classList.remove('hidden-page');
+    }
+    else{
+      alert("No page, please add another one");
+    }
+     
+  }
+
+   
+   
   // afficher le nombre de page
   const pageNbr = document.getElementById('ident-page-nbr-'+ id)
   if (pageNbr) pageNbr.textContent = numberOfPage;
@@ -501,7 +480,7 @@ function prevIdentifier(id = 1) {
 
 }
 
-
+var pagedeleted = [];
 // fonction pour supprimer une page ajouté
 function deletePage(id) {
   numberOfPage -= 1;
@@ -509,6 +488,8 @@ function deletePage(id) {
   document.getElementById('ident-page-'+ id).remove();
   const pageNbr = document.getElementById('ident-page-nbr-'+ id)
   if (pageNbr) pageNbr.textContent = numberOfPage;
+  pagedeleted.push(id);
+  document.getElementsByName("addpage")[document.getElementsByName("addpage").length - 1].setAttribute("style","display:block;");
 }
 
 
@@ -545,17 +526,4 @@ function nextChapter() {
 
   console.log(xmldata)
   previousToPage2();
-}
-
-/**
- * Array form chapter page
- */
-var chapterPage_Array = []; 
-
-function getSections() {
-  return document.querySelectorAll('section');
-}
-
-function getSection(index) {
-  return document.querySelectorAll('section')[index];
 }
