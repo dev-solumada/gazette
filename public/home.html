@@ -20,7 +20,7 @@
 									<option value="" class="text-muted">Click here...</option>
 									<% dones.forEach(function(done) { %>
 										<option value='<%= done.name %>'><%= done.name %> treated by <%= done.treated_by %> </option>
-									  <% }); %>
+									<% }); %>
 								</select>
 							</div>
 							<div class="float-end text-end mx-3">
@@ -52,8 +52,6 @@
 					<div class="col-xl-6">
 						<div class="form-group my-2">
 							<input type="file" accept="application/pdf" class="form-control" id="pdf" aria-describedby="helpId" placeholder="" onchange="uploadPDF()">
-							<!-- <button class="btn btn-dark float-start"><B class="text-white">Next document</B></button>
-							<button class="btn btn-danger float-end"><B class="text-white">Mark as done</B></button> -->
 						</div>
 						<object id="show" data="/pdf_paceholder.png" style="width:100% !important;zoom: 0% !important;" >
 							Your browser does not support PDFs
