@@ -1,3 +1,7 @@
+
+/** */
+var xmldata=['<?xml version="1.0"?>'];
+
 /**
  * Download xml file
  * @param {*} contentType 
@@ -17,7 +21,7 @@ function downloadData(contentType,data,filename){
 }
 
 function fromToXml(form){
-    var xmldata=['<?xml version="1.0"?>'];
+    // var xmldata=['<?xml version="1.0"?>'];
     xmldata.push("<form>");
     var inputs=form.elements;
     for(var i=0;i<inputs.length;i++){
@@ -150,595 +154,6 @@ function main() {
   let chap = localStorage.getItem('chap');
   let chapId = chap.toUpperCase().split('_')[0];
   
-  // champs pour page3.html
-  if (chapId === "APP") {
-    // afficher la page pour application
-    switch (chap.toUpperCase()) {
-      case "APP_E" :
-        if (pays.toUpperCase() === 'TN') 
-          disableFields(['111', '171', '176', '180', '186', '200', '527', '591', '732', '770'])
-        else 
-          disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "300", "527", "571", "591", "732", "770"]);
-        break;
-      case "APP_T":
-        disableFields([
-          "111",
-          "141",
-          "151",
-          "156",
-          "171",
-          "176",
-          "180",
-          "186",
-          "200",
-          "300",
-          "527",
-          "571",
-          "591",
-          "732",
-          "770",
-        ]);
-        break;
-      case "APP_M":
-        disableFields([
-          "111",
-          "141",
-          "151",
-          "156",
-          "171",
-          "176",
-          "180",
-          "186",
-          "200",
-          "300",
-          "527",
-          "571",
-          "591",
-          "732",
-          "750",
-          "770",
-        ]);
-        break;
-      case "APP":
-        // vérifier pays
-        switch (pays.toUpperCase()) {
-          case "MM": // MM
-            disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "210", "220", "527", "571", "591", "732", "770"]);
-            break;
-          case "TRNC": // TRNC
-            disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "300", "571", "591", "732", "770"]);
-            break;
-          case "MS": // MS
-            disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "210", "220", "300", "527", "571", "591", "732", "740", "750", "770"]);
-            break;
-          case "GM": // GM
-            disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "300", "527", "571", "591", "732", "750", "770"]);
-            break;
-          case "LS": // LS
-            disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "300", "527", "571", "591", "732", "770"]);
-            break;
-          case "SZ": // SZ
-            disableFields(["111", "141", "151", "156", "171", "176", "180", "186", "200", "527", "732", "770"]);
-            break;
-        }
-
-      default:
-        break;
-    }
-  }
-  // champ pour renewal.html
-  else if (chapId === "REN") {
-    // disable fields for nice
-    switch (pays) {
-      case "DZ": // DZ
-        disableFields([
-          "141",
-          "151",
-          "171",
-          "176",
-          "180",
-          "186",
-          "200",
-          "210",
-          "220",
-          "300",
-          "527",
-          "571",
-          "591",
-          "731",
-          "750",
-          "770",
-        ]);
-        break;
-      case "TN": // TN
-        disableFields([
-          "111",
-          "141",
-          "151",
-          "156",
-          "171",
-          "176",
-          "186",
-          "200",
-          "300",
-          "510",
-          "527",
-          "540",
-          "541",
-          "571",
-          "591",
-          "731",
-          "750",
-          "770",
-        ]);
-        break;
-      case "TRNC": // TRNC
-        disableFields([
-          "111",
-          "141",
-          "151",
-          "171",
-          "176",
-          "180",
-          "186",
-          "200",
-          "220",
-          "300",
-          "510",
-          "527",
-          "540",
-          "541",
-          "571",
-          "591",
-          "731",
-          "740",
-          "750",
-          "770",
-        ]);
-        break;
-      case "MS": // MS
-        disableFields([
-          "141",
-          "151",
-          "171",
-          "186",
-          "200",
-          "210",
-          "220",
-          "527",
-          "571",
-          "591",
-          "731",
-          "740",
-          "750",
-          "770",
-        ]);
-        break;
-      case "LS": // LS
-        disableFields([
-          "141",
-          "151",
-          "171",
-          "176",
-          "180",
-          "200",
-          "210",
-          "220",
-          "300",
-          "510",
-          "527",
-          "540",
-          "541",
-          "571",
-          "591",
-          "731",
-          "732",
-          "740",
-          "750",
-          "770",
-        ]);
-        break;
-      case "SZ": // SZ
-        disableFields([
-          "111",
-          "141",
-          "151",
-          //"156",
-          "171",
-          "176",
-          "186",
-          "200",
-          "220",
-          "300",
-          "510",
-          "527",
-          "540",
-          "541",
-          "571",
-          "591",
-          "731",
-          "740",
-          "750",
-          "770",
-        ]);
-        break;
-    }
-  }
-  // registrations
-  else if (chapId === "REG") {
-    // openFile('plateforme/registration.html');
-    switch (chap.toUpperCase()) {
-      case "REG_M":
-        switch (pays) {
-          case "MG":
-            disableFields([
-              "141",
-              "151",
-              "156",
-              "171",
-              "176",
-              "180",
-              "186",
-              "200",
-              "210",
-              "220",
-              "300",
-              "510",
-              "511",
-              "527",
-              "540",
-              "541",
-              "571",
-              "591",
-              "731",
-              "732",
-              "740",
-              "750",
-              "770",
-            ]);
-            break;
-          default:
-            break;
-        }
-        break;
-      default:
-        switch (pays) {
-          case "DZ": // DZ
-            disableFields([
-              "141",
-              "156",
-              "171",
-              "176",
-              "180",
-              "186",
-              "200",
-              "220",
-              "300",
-              "527",
-              "571",
-              "591",
-              "731",
-              "740",
-              "750",
-              "770",
-            ]);
-            break;
-          //vérifié
-          case "MG": // MG
-            disableFields([
-              "141",
-              "151",
-              "156",
-              "171",
-              "176",
-              "186",
-              "200",
-              "210",
-              "300",
-              "527",
-              "571",
-              "591",
-              "731",
-              "770",
-            ]);
-            break;
-          case "MS": // MS
-            disableFields([
-              "141",
-              "156",
-              "176",
-              "180",
-              "186",
-              "200",
-              "210",
-              "220",
-              "300",
-              "527",
-              "731",
-              "740",
-              "750",
-              "770",
-            ]);
-            break;
-          case "LS": // LS
-            disableFields([
-              "141",
-              "156",
-              "171",
-              "176",
-              "180",
-              "186",
-              "200",
-              "210",
-              "220",
-              "300",
-              "510",
-              "527",
-              "571",
-              "591",
-              "731",
-              "770",
-            ]);
-            break;
-          case "SZ": // SZ
-            disableFields([
-              "111",
-              "141",
-              "151",
-              "156",
-              "171",
-              "176",
-              "180",
-              "186",
-              "200",
-              "220",
-              "300",
-              "510",
-              "527",
-              "540",
-              "571",
-              "591",
-              "731",
-              "740",
-              "750",
-              "770",
-            ]);
-            break;
-        }
-        break;
-    }
-  } else {
-    switch (pays) {
-      case "TN":
-        if (chapId === "COR")
-          disableFields([
-            "111",
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "300",
-            "527",
-            "571",
-            "591",
-            "732",
-            "770",
-          ]);
-        break;
-      case "MG":
-        if (chapId === "COM")
-          disableFields([
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "186",
-            "200",
-            "210",
-            "300",
-            "511",
-            "527",
-            "540",
-            "571",
-            "591",
-            "731",
-            "770",
-          ]);
-        break;
-      case "TRNC":
-        if (chapId === "ADD")
-          disableFields([
-            "111",
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "220",
-            "300",
-            "510",
-            "511",
-            "527",
-            "540",
-            "541",
-            "571",
-            "591",
-            "731",
-            "740",
-            "750",
-            "770",
-          ]);
-        else if (chapId === "TRA")
-          disableFields([
-            "111",
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "220",
-            "300",
-            "510",
-            "511",
-            "527",
-            "540",
-            "541",
-            "571",
-            "591",
-            "731",
-            "740",
-            "750",
-          ]);
-        else if (chapId === "CAN")
-          disableFields([
-            "111",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "220",
-            "300",
-            "510",
-            "527",
-            "540",
-            "541",
-            "571",
-            "591",
-            "731",
-            "740",
-            "750",
-            "770",
-          ]);
-        break;
-      case "MS":
-        if (chapId === "RES")
-          disableFields([
-            "141",
-            "151",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "210",
-            "220",
-            "300",
-            "527",
-            "571",
-            "591",
-            "731",
-            "740",
-            "750",
-            "770",
-          ]);
-        break;
-      case "LS":
-        if (chapId === "ASS")
-          // ASS
-          disableFields([
-            "111",
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "300",
-            "527",
-            "540",
-            "541",
-            "571",
-            "591",
-            "731",
-            "740",
-            "750",
-          ]);
-        if (chapId === "MER")
-          // MER
-          disableFields([
-            "111",
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "300",
-            "510",
-            "527",
-            "540",
-            "541",
-            "571",
-            "591",
-            "731",
-            "740",
-            "750",
-          ]);
-        if (chapId === "RUSER")
-          // RUSER
-          disableFields([
-            "111",
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "300",
-            "527",
-            "541",
-            "571",
-            "591",
-            "732",
-            "750",
-            "770",
-          ]);
-        if (chapId === "ADD")
-          // ADD
-          disableFields([
-            "111",
-            "141",
-            "151",
-            "156",
-            "171",
-            "176",
-            "180",
-            "186",
-            "200",
-            "300",
-            "527",
-            "540",
-            "541",
-            "571",
-            "591",
-            "731",
-            "740",
-            "750",
-          ]);
-
-        break;
-    }
-  }
   // functions 
   callScripts();
   tableScript();
@@ -864,7 +279,7 @@ function displayGazetteInfo() {
   //   datep_input.value = localStorage.getItem('GAZP');
 }
 
-function displayAvailableChapters(country = 'DZ') {
+function getAvailableChapter(country) {
   var obj = {}
   switch (country) {
     case 'DZ': // for DZ
@@ -909,6 +324,11 @@ function displayAvailableChapters(country = 'DZ') {
     obj['Renewal'] = ['REN'];
       break;
   }
+  return obj;
+}
+
+function displayAvailableChapters(country = 'DZ') {
+  var obj = getAvailableChapter(country);
   // création d'élément et affichage des chapitres
   let chapter_select = document.getElementById('chapitre');
   chapter_select.innerHTML = '';
@@ -920,6 +340,24 @@ function displayAvailableChapters(country = 'DZ') {
       option.value = value;
       option.textContent = value;
       optgroup.append(option);
+    });
+    chapter_select.appendChild(optgroup);
+  });
+}
+
+function displayAvailableChaptersForNext(activeChapter, country) {
+  var obj = getAvailableChapter(country);
+  // création d'élément et affichage des chapitres
+  let chapter_select = document.querySelectorAll('.nextchap')[Array.from(document.forms).indexOf(getLastForm())];
+  chapter_select.innerHTML = '<option value=""></option>';
+  Object.keys(obj).forEach(key => {
+    let optgroup = document.createElement('optgroup');
+    optgroup.label = key;
+    obj[key].forEach(value => {
+        let option = document.createElement('option');
+        option.value = value;
+        option.textContent = value;
+        optgroup.append(option);
     });
     chapter_select.appendChild(optgroup);
   });

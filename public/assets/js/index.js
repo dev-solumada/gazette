@@ -13,6 +13,28 @@ function openFile(file) {
   f.send(null);
 }
 
+
+// fonciton pour ajouter un nouveau page
+function appendFile(file) {
+  var f = new XMLHttpRequest();
+  f.open("GET", file, false);
+  f.onreadystatechange = function () {
+    if(f.readyState === 4) {
+        if(f.status === 200 || f.status == 0) {
+          var res= f.responseText;
+          document.getElementById('left-page').innerHTML += res;
+          window.scrollTo(0, 0);
+        }
+    }
+  }
+  f.send(null);
+}
+
+// dernier forme sur la page
+function getLastForm() {
+  return document.forms[document.forms.length - 1];
+}
+
 /**
  * UPLOAD PDF
  */
@@ -156,6 +178,39 @@ function getPage2Values() {
     Pages.agent = null;
   }
   Pages.nice = document.getElementById('nice-field').innerHTML;
+
+  // afficher les chapitres sur next chapter
+  displayAvailableChaptersForNext(chap, localStorage.getItem('GAZC').toUpperCase());
+
+  // donner une classe à la prémiere forme
+  document.forms[0].id = chap;
+  // action sur choisir nextchapter
+  const nextchap_select = document.querySelectorAll('.nextchap')[0];
+  nextchap_select.addEventListener('change', (e) => {
+    g(e.target);
+  });
+
+}
+
+function g(nextchap_select) {
+  let chap_field = document.getElementById(nextchap_select.value);
+    // cacher tous les form
+    for (const form of document.forms)
+     form.classList.add('hidden-page');
+    // si la page existe
+    if (chap_field) {
+      chap_field.classList.remove('hidden-page');
+    } else {
+      // si la page n'éxiste pas, on va donner un id
+      appendFile('plateforme/page3.html');
+      getLastForm().id = nextchap_select.value;
+      chap_field = document.getElementById(nextchap_select.value);
+      chap_field.classList.remove('hidden-page');
+      displayAvailableChaptersForNext(nextchap_select.value, localStorage.getItem('GAZC').toUpperCase());
+      document.querySelectorAll('.nextchap')[Array.from(document.forms).indexOf(getLastForm())].addEventListener('change', (e) => {
+        g(e.target);
+      })
+    }
 }
 
 // revenir dans la première page
@@ -174,6 +229,7 @@ function previousToPage1() {
 // revenir dans la deuxième page
 function previousToPage2() {
   if (confirm("Do you want to exit this page? Some recordings may be lost.")) {
+    numberOfPage = 1;
     let page = document.getElementById('left-page');
     let pageLeft = page.innerHTML;
     localStorage.setItem('pageLeft', pageLeft);
@@ -197,7 +253,12 @@ function previousToPage2() {
 const showWarnings = (input = null, message = '') => {
   let warning_ul = document.getElementById('warnings-ul');
   if (input === null && message === '') {
-    warning_ul.innerHTML = '';
+    if (document.getElementById("already").value == ""){
+      warning_ul.innerHTML = '';
+    }
+    else{
+      warning_ul.innerHTML = "<li style ='font-weight:500;' class='col-md-6 succes' >"+ document.getElementById("already").value+"</li>";
+    }
     for (const i of document.querySelectorAll('.select')) {
       // supprimer la class invalid
       i.classList.remove('is-invalid');
@@ -262,6 +323,9 @@ function downloadXML() {
     ul.appendChild(li);
   }
 
+  // effacer tous les avertissements
+  document.getElementById('warnings-ul').innerHTML = '';
+
   if (!validation) {
     swal({
       title: "Are you to download the file?",  
@@ -282,9 +346,15 @@ function downloadXML() {
         let GAZN = localStorage.getItem('GAZN');
         // gazette date
         const dateStr = localStorage.getItem('GAZD');
-        let GAZD = dateStr.replace('-', '').replace('-', ''); 
-        download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
-        sendRequest("/download",document.getElementById("pdf").files[0].name);
+        let GAZD = dateStr.replace('-', '').replace('-', '');
+        if (localStorage.getItem('version') != 1 ){
+          download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
+          sendRequest("/download",document.getElementById("pdf").files[0].name);
+        }
+        else{
+          download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
+          sendRequest("/download",document.getElementById("pdf").files[0].name);
+        } 
       }
     });
   }
@@ -300,8 +370,13 @@ function downloadXML() {
     const dateStr = localStorage.getItem('GAZD');
     let GAZD = dateStr.replace('-', '').replace('-', ''); 
     // telecharger les ficher zip et xml
-    download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
-    sendRequest("/download",document.getElementById("pdf").files[0].name);
+    if (localStorage.getItem('version') != 1 ){
+      download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
+      sendRequest("/download",document.getElementById("pdf").files[0].name);
+    } else {
+      download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
+      sendRequest("/download",document.getElementById("pdf").files[0].name);
+    }
   } 
 }
 //sending request in server
@@ -317,7 +392,7 @@ function sendRequest(url,filename) {
       window.location = "/";
     }
   };
-  http.send("filename=" + filename );
+  http.send("filename=" + filename +"&version="+localStorage.getItem('version'));
 }
 
 var numberOfPage = 1;
@@ -434,4 +509,53 @@ function deletePage(id) {
   document.getElementById('ident-page-'+ id).remove();
   const pageNbr = document.getElementById('ident-page-nbr-'+ id)
   if (pageNbr) pageNbr.textContent = numberOfPage;
+}
+
+
+/**
+ * Bouton annuler
+ */
+function cancel() {
+  swal({
+    title: "Are you sure to cancel?",
+    text: "Once canceled, you will no longer be able to recover the data!",
+    icon: "warning",
+    buttons: {
+      cancel: "No",
+      confirm: "Yes",
+    },
+    dangerMode: true,
+  })
+  .then((willDelete) => {
+    if (willDelete) {
+      window.location.href = '/';
+    } else {
+      swal("Your data is safe!");
+    }
+  });
+}
+
+/**
+ * Chapitre suivant
+ */
+
+function nextChapter() {
+  // enregistrer les données en xml
+  fromToXml(document.forms[0]);
+
+  console.log(xmldata)
+  previousToPage2();
+}
+
+/**
+ * Array form chapter page
+ */
+var chapterPage_Array = []; 
+
+function getSections() {
+  return document.querySelectorAll('section');
+}
+
+function getSection(index) {
+  return document.querySelectorAll('section')[index];
 }
