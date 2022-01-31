@@ -138,6 +138,7 @@ function getPage2Values() {
   openFile('plateforme/page3.html');
   // fonction venant du fichier main.js
   // storer une forme de page
+  originalSection.innerHTML = getSection(0).innerHTML;
   main();
   localStorage.setItem('current-pageId', 0);
   // toutes les pages origines
@@ -168,7 +169,6 @@ function getPage2Values() {
 
   // nextpage.js set original page
   originalPage.innerHTML = document.querySelectorAll('.page-to-repeat')[0].innerHTML;
-  originalSection.innerHTML = getSection(0).innerHTML;
 
 
   // vider l'array pour page 
@@ -212,7 +212,7 @@ function getPage2Values() {
         localStorage.setItem('prevchap', chap);
         let section = document.createElement('section');
         getSection(0).id = chap;
-        getSection(0).innerHTML = originalSection.innerHTML;
+        getSection(0).innerHTML = value.includes("APP") ? getSectionContentFile('/app.html') : originalSection.innerHTML;
         getSection(0).classList.add('showing-page');
         let pageButtons = getSection(0).firstElementChild.nextElementSibling.nextElementSibling;
         if (pageButtons.classList.contains('page-buttons')) 
