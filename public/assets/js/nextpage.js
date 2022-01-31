@@ -27,7 +27,7 @@ function addPage(page = document.createElement('div')) {
     img.setAttribute('onclick', 'deletePage(this)');
     legend.append(img);
     fieldset.append(legend);
-    fieldset.innerHTML += newPage().innerHTML;
+    fieldset.innerHTML += getPages(0).innerHTML;
     page.classList.add('active-page');
     page.append(fieldset);
     // hide all page
