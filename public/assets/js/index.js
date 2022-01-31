@@ -131,7 +131,6 @@ var Pages = {}
 function getPage2Values() {
                         
   var chap = document.getElementById("chapitre").value;
-  
   // local storage variables
   localStorage.setItem('chap', chap);
 
@@ -214,6 +213,8 @@ function getPage2Values() {
         getSection(0).id = chap;
         getSection(0).innerHTML = value.includes("APP") ? getSectionContentFile('/app.html') : originalSection.innerHTML;
         getSection(0).classList.add('showing-page');
+        let select = getSection(0).firstElementChild.firstElementChild.firstElementChild.firstElementChild.nextElementSibling;
+        select.innerHTML = `<option value="${chap}">${chap}</option>`;
         let pageButtons = getSection(0).firstElementChild.nextElementSibling.nextElementSibling;
         if (pageButtons.classList.contains('page-buttons')) 
           pageButtons.classList.add('pagebtn-' + chap);
