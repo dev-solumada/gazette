@@ -8,24 +8,25 @@ let Bdfiles = [];
 var version = [];
 var fullname = "";
 routeExp.route("/").get(function (req, res) {
-  mongoose
-  .connect("mongodb+srv://solumada:Password@cluster0.t0vx8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
-    useUnifiedTopology: true,
-    UseNewUrlParser: true,
-  })
-  .then(async () => {
+  // mongoose
+  // .connect("mongodb+srv://solumada:Password@cluster0.t0vx8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
+  //   useUnifiedTopology: true,
+  //   UseNewUrlParser: true,
+  // })
+  // .then(async () => {
     // PdfDoneSchema.deleteMany({},()=>{
     //   console.log("All is removed");
     // })
-  allpdf = await PdfDoneSchema.find();
-  Bdfiles = [];
-  version = [];
-  for(i=0;i<allpdf.length;i++){
-   Bdfiles.push(allpdf[i].name);
-   version.push(allpdf[i].version);
-   }
-   res.render("home.html",{dones : allpdf, version: version, bdfls: Bdfiles});
-  })
+  // allpdf = await PdfDoneSchema.find();
+  // Bdfiles = [];
+  // version = [];
+  // for(i=0;i<allpdf.length;i++){
+  //  Bdfiles.push(allpdf[i].name);
+  //  version.push(allpdf[i].version);
+  //  }
+  //  res.render("home.html",{dones : allpdf, version: version, bdfls: Bdfiles});
+  // })
+  res.render("home.html",{dones : [], version: "null", bdfls: "null"});
 });
 
 routeExp.route("/download").post(function (req, res) {

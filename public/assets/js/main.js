@@ -21,7 +21,7 @@ function downloadData(contentType,data,filename){
 }
 
 function fromToXml(form){
-    // var xmldata=['<?xml version="1.0"?>'];
+    var xmldata=['<?xml version="1.0"?>'];
     xmldata.push("<form>");
     var inputs=form.elements;
     for(var i=0;i<inputs.length;i++){
@@ -153,7 +153,9 @@ function main() {
   let pays = localStorage.getItem('GAZC');
   let chap = localStorage.getItem('chap');
   let chapId = chap.toUpperCase().split('_')[0];
-  
+  if (chapId.includes("APP")){
+    disableFields(["111","141","151","156","171","176","180","186",]);
+  }
   // functions 
   callScripts();
   tableScript();
@@ -262,21 +264,21 @@ function displayGazetteInfo() {
   if (chap_input)
     chap_input.innerHTML = `<option value="${localStorage.getItem('chap')}">${localStorage.getItem('chap').toUpperCase()}</option>`;
   // afficher pays
-  // let country_input = document.getElementById('GAZC')
-  // if (country_input)
-  //   country_input.value = `${localStorage.getItem('GAZC')}`;
-  // // afficher number
-  // let number_input = document.getElementById('GAZN')
-  // if (number_input)
-  //   number_input.value = localStorage.getItem('GAZN');
-  // // afficher date
-  // let date_input = document.getElementById('GAZD')
-  // if (date_input)
-  //   date_input.value = localStorage.getItem('GAZD');
-  //   // date of pub
-  // let datep_input = document.getElementById('GAZP')
-  // if (datep_input)
-  //   datep_input.value = localStorage.getItem('GAZP');
+  let country_input = document.getElementById('GAZC')
+  if (country_input)
+    country_input.value = `${localStorage.getItem('GAZC')}`;
+  // afficher number
+  let number_input = document.getElementById('GAZN')
+  if (number_input)
+    number_input.value = localStorage.getItem('GAZN');
+  // afficher date
+  let date_input = document.getElementById('GAZD')
+  if (date_input)
+    date_input.value = localStorage.getItem('GAZD');
+    // date of pub
+  let datep_input = document.getElementById('GAZP')
+  if (datep_input)
+    datep_input.value = localStorage.getItem('GAZP');
 }
 
 function getAvailableChapter(country) {
@@ -348,7 +350,7 @@ function displayAvailableChapters(country = 'DZ') {
 function displayAvailableChaptersForNext(activeChapter, country) {
   var obj = getAvailableChapter(country);
   // création d'élément et affichage des chapitres
-  let chapter_select = document.querySelectorAll('.nextchap')[Array.from(document.forms).indexOf(getLastForm())];
+  let chapter_select = document.querySelector('#nextchap');
   chapter_select.innerHTML = '<option value=""></option>';
   Object.keys(obj).forEach(key => {
     let optgroup = document.createElement('optgroup');
@@ -372,8 +374,12 @@ window.addEventListener("paste", e => {
   // get current image and input file
   const pageId = parseInt(localStorage.getItem('current-pageId')) || 0;
   if (e.clipboardData.files.length > 0) {
-      const fileInput = document.querySelectorAll(".inputFile")[pageId];
-      fileInput.files = e.clipboardData.files;
+      if (clickedImg) {
+        let inputFile = clickedImg.nextSibling;
+        while (inputFile.type !== 'file') {
+          inputFile = inputFile.nextSibling;
+        }
+      }
       
       if (e.clipboardData.files[0].type.startsWith("image/")) {
         setPreviewImage(e.clipboardData.files[0])
@@ -381,15 +387,41 @@ window.addEventListener("paste", e => {
   }
 
   function setPreviewImage(file) {
-      const fileReader = new FileReader();
+    const fileReader = new FileReader();
 
-      fileReader.readAsDataURL(file);
-      fileReader.onload = () => {
-        document.querySelectorAll('.image')[pageId].src = fileReader.result;
-        document.querySelectorAll('.image')[pageId].removeAttribute("width");
-        document.querySelectorAll('.image')[pageId].removeAttribute("height");
-        document.querySelectorAll(".imagePath")[pageId].value = fileReader.result;
+    fileReader.readAsDataURL(file);
+    fileReader.onload = () => {
+      if (clickedImg) {
+        clickedImg.src = fileReader.result;
+        clickedImg.removeAttribute("width");
+        clickedImg.removeAttribute("height");
+        let inputFilehidden = clickedImg.nextElementSibling;
+        while (inputFilehidden.type !== 'hidden') {
+          inputFilehidden = inputFilehidden.nextElementSibling;
+        }
+        inputFilehidden.value = fileReader.result;
+        
+        // reset to null the image
+        clickedImg.classList.remove('img-focused');
+        clickedImg = null;
       }
+    }
   }
 
 });
+
+
+/**
+ * Evenement sur image 
+ */
+var clickedImg = null;
+// envent handler
+function handler(img) {
+  if (clickedImg) clickedImg.classList.remove('img-focused') 
+  if (clickedImg === img) {
+    clickedImg = null;
+  } else {
+    img.classList.add('img-focused');
+    clickedImg = img;
+  }
+}
