@@ -14,22 +14,6 @@ function openFile(file) {
 }
 
 
-// fonciton pour ajouter un nouveau page
-function appendFile(file) {
-  var f = new XMLHttpRequest();
-  f.open("GET", file, false);
-  f.onreadystatechange = function () {
-    if(f.readyState === 4) {
-        if(f.status === 200 || f.status == 0) {
-          var res= f.responseText;
-          document.getElementById('left-page').innerHTML += res;
-          window.scrollTo(0, 0);
-        }
-    }
-  }
-  f.send(null);
-}
-
 // dernier forme sur la page
 function getLastForm() {
   return document.forms[document.forms.length - 1];
@@ -41,7 +25,7 @@ function getLastForm() {
  var img = document.getElementById("pdf");
  function uploadPDF(){
      document.getElementById("show").setAttribute("data",URL.createObjectURL(img.files[0]));
-     document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100vh;zoom: 0% !important;');
+     document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100% !important;zoom: 0% !important;');
  }
 
 
@@ -182,13 +166,78 @@ function getPage2Values() {
   // afficher les chapitres sur next chapter
   displayAvailableChaptersForNext(chap, localStorage.getItem('GAZC').toUpperCase());
 
-  // donner une classe à la prémiere forme
-  document.forms[0].id = chap;
+  // nextpage.js set original page
+  originalPage.innerHTML = document.querySelectorAll('.page-to-repeat')[0].innerHTML;
+  originalSection.innerHTML = getSection(0).innerHTML;
+
+
+  // vider l'array pour page 
+  chapterPage_Array = []; 
+  // Créer les page pour chapitre
+  let chapters = getAvailableChapter(localStorage.getItem('GAZC').toUpperCase());
+  Object.keys(chapters).forEach(key => {
+    chapters[key].forEach(value => {
+      if (value !== chap) {
+        // field set
+        let fieldset = document.createElement('fieldset');
+        let legend = document.createElement('legend');
+        legend.className = 'text-end';
+        let img = document.createElement('img');
+        img.src = '/Delete-icon.png';
+        img.className="btn";
+        img.width="24";
+        img.height="24";
+        img.setAttribute('onclick', "deleteSection(this)");
+        legend.append(img);
+        fieldset.append(legend);
+        let section = document.createElement('section');
+        let sectionContent = value.includes("APP") ? getSectionContentFile('/app.html') : originalSection.innerHTML;
+        fieldset.innerHTML += sectionContent;
+        section.append(fieldset);
+        section.id = value;
+        section.className = 'hidden-page deleted mt-2';
+        let select = section.firstChild.firstChild.nextSibling.nextSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling;
+        select.innerHTML = `<option value="${value}">${value}</option>`;
+        let pageButtons = section.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling;
+        if (pageButtons.classList.contains('page-buttons')); 
+          pageButtons.classList.add('pagebtn-' + value);
+
+        // page to repat
+        let pageToRepeat = section.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling;
+        pageToRepeat.className = 'page-to-repeat-' + value     + ' active-page';
+        
+        chapterPage_Array.push(section);
+
+      } else {
+        localStorage.setItem('prevchap', chap);
+        let section = document.createElement('section');
+        getSection(0).id = chap;
+        getSection(0).innerHTML = originalSection.innerHTML;
+        getSection(0).classList.add('showing-page');
+        let pageButtons = getSection(0).firstElementChild.nextElementSibling.nextElementSibling;
+        if (pageButtons.classList.contains('page-buttons')) 
+          pageButtons.classList.add('pagebtn-' + chap);
+        // page to repat
+        let pageToRepeat = getSection(0).firstElementChild.nextElementSibling;
+        pageToRepeat.classList.replace('page-to-repeat', 'page-to-repeat-' + chap);
+
+        chapterPage_Array.push(getSection(0));
+      }
+    })
+  })
+
+  showFinishedChapter();
+  
+
   // action sur choisir nextchapter
-  const nextchap_select = document.querySelectorAll('.nextchap')[0];
+  const nextchap_select = document.querySelector('#nextchap');
   nextchap_select.addEventListener('change', (e) => {
-    g(e.target);
+    if (e.target.value === '') return;
+    appendSection(e.target.value)
+    showSection(e.target.value);
+    localStorage.setItem('prevchap', e.target.value);
   });
+  
 
 }
 
@@ -229,7 +278,6 @@ function previousToPage1() {
 // revenir dans la deuxième page
 function previousToPage2() {
   if (confirm("Do you want to exit this page? Some recordings may be lost.")) {
-    numberOfPage = 1;
     let page = document.getElementById('left-page');
     let pageLeft = page.innerHTML;
     localStorage.setItem('pageLeft', pageLeft);
@@ -355,6 +403,8 @@ function downloadXML() {
           download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
           sendRequest("/download",document.getElementById("pdf").files[0].name);
         } 
+
+        showWarnings();
       }
     });
   }
@@ -377,6 +427,7 @@ function downloadXML() {
       download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
       sendRequest("/download",document.getElementById("pdf").files[0].name);
     }
+    showWarnings();
   } 
 }
 //sending request in server
@@ -394,123 +445,6 @@ function sendRequest(url,filename) {
   };
   http.send("filename=" + filename +"&version="+localStorage.getItem('version'));
 }
-
-var numberOfPage = 1;
-function nextIdentifier(id = 1) {
-  if (Object.keys(Pages).length === 0) return;
-  id = parseInt(id);
-  const prevId = id - 1;
-  const pageField = document.getElementById('ident-page-'+ prevId);
-  // elements à ajouter
-  const page = `
-  <div class="row mt-0">
-    <div class="col-12 p-1">
-      <fieldset id="ident-${id}" class="">
-        <legend class="text-end"><img src="assets/images/Delete-icon.png" class="btn" alt="..." width="24" height="24" onclick="deletePage(${id})"></legend>
-        <div class="row">
-          <div class="col-md-7 col-lg-7 col-xl-7 p-0">
-            ${Pages.ident1 ? Pages.ident1 : ''}
-          </div>
-          <div class="col-md-5 col-lg-5 col-xl-5  p-0">
-            ${Pages.ident2 ? Pages.ident2 : ''}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.app ? Pages.app : ''}
-          </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.owner ? Pages.owner : ''}
-          </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.agent ? Pages.agent : ''}
-          </div>
-        </div>
-    
-        <div class="row">
-          <div class="col-md-12 p-1">
-            ${Pages.nice ? Pages.nice : ''}
-          </div>
-        </div>
-      </fieldset>
-    </div>
-  </div>
-  
-  <div class="row">
-    <div class="col-md-12 p-1">
-      <!-- Boutton next and previous -->
-      <div class="text-end p-1 mt-2" id="ident-1-button">
-        <small class="float-start text-muted">Number of page: <span id="ident-page-nbr-${id}"></span></small>
-        <button type="button" onclick="prevIdentifier('${id}')" class="btn btn-warning"><B class="text-white">&xlArr; Previous</B></button>
-        <span class="badge bg-dark">${id+1}</span>
-        <button type="button" onclick="nextIdentifier('${id+1}')" class="btn btn-warning"><B class="text-white">Next &xrArr;</B></button>
-      </div>
-    </div>
-  </div>
-  `;
-  // cacher le prev page
-  pageField.classList.add('hidden-page');
-  const pExist = document.getElementById(`ident-${id}`);
-
-  if (!pExist) {
-    const div = document.createElement('div');
-    div.id = 'ident-page-'+id;
-    div.className = 'ident-pages';
-    // page à remplir
-    div.innerHTML += page;
-    pageField.after(div);
-    numberOfPage += 1;
-    // document.querySelectorAll('.image')[id].src = 'assets/images/placeholder.png';
-  } else {
-    const p = document.getElementById('ident-page-'+id);
-    if (p) p.classList.remove('hidden-page');
-  }
-  // afficher le nombre de page
-  const pageNbr = document.getElementById('ident-page-nbr-'+ id)
-  if (pageNbr) pageNbr.textContent = numberOfPage;
-  
-  // set current page Id
-  localStorage.setItem('current-pageId', id);
-  
-} 
-
-function prevIdentifier(id = 1) {
-  // cacher la page
-  let prevPageContent = document.getElementById('ident-page-'+ id);
-  prevPageContent.classList.add('hidden-page');
-  id = parseInt(id);
-  let pageId = id - 1;
-
-  let pageContent = document.getElementById('ident-page-'+ pageId);
-  if  (pageContent)
-    // afficher la page 
-    pageContent.classList.remove('hidden-page');
-
-  // set current page Id
-  localStorage.setItem('current-pageId', pageId)
-
-  // afficher le nombre de page
-  const pageNbr = document.getElementById('ident-page-nbr-'+ pageId)
-  if (pageNbr) pageNbr.textContent = numberOfPage;
-
-}
-
-
-// fonction pour supprimer une page ajouté
-function deletePage(id) {
-  numberOfPage -= 1;
-  prevIdentifier(id);
-  document.getElementById('ident-page-'+ id).remove();
-  const pageNbr = document.getElementById('ident-page-nbr-'+ id)
-  if (pageNbr) pageNbr.textContent = numberOfPage;
-}
-
 
 /**
  * Bouton annuler
@@ -540,22 +474,5 @@ function cancel() {
  */
 
 function nextChapter() {
-  // enregistrer les données en xml
-  fromToXml(document.forms[0]);
-
-  console.log(xmldata)
-  previousToPage2();
-}
-
-/**
- * Array form chapter page
- */
-var chapterPage_Array = []; 
-
-function getSections() {
-  return document.querySelectorAll('section');
-}
-
-function getSection(index) {
-  return document.querySelectorAll('section')[index];
+  
 }

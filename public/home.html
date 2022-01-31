@@ -43,7 +43,7 @@
 					</div>
 				</div>
 				<!-- Main row -->
-				<div class="row">
+				<div class="row content">
 					<!-- INPUT FIELD // GAUCHE -->
 					<div class="col-xl-6" id="left-page">
 						<!-- Identifier -->
@@ -53,7 +53,7 @@
 						<div class="form-group my-2">
 							<input type="file" accept="application/pdf" class="form-control" id="pdf" aria-describedby="helpId" placeholder="" onchange="uploadPDF()">
 						</div>
-						<object id="show" data="/pdf_paceholder.png" style="width:100% !important;zoom: 0% !important;" >
+						<object id="show" data="/pdf_paceholder.png" style="width:100% !important;height: 100vh !important;zoom: 0% !important;" >
 							Your browser does not support PDFs
 						</object>
 					</div>
@@ -68,13 +68,15 @@
 	<script src="/index.js" type="text/javascript"></script>
 	<script src="/jszip.min.js" type="text/javascript"></script>
 	<script src="/sweetalert.min.js" type="text/javascript"></script>
+	<script src="/nextchap.js" type="text/javascript"></script>
+	<script src="/nextpage.js" type="text/javascript"></script>
     <script>
         openFile('/page1.html');
 		callScripts();
 		// avertir l'utilisateur lors de l'actualisation de la page
-		// window.onbeforeunload = function(e) {
-		// 	return "Do you want to exit this page?";
-		// };
+		window.onbeforeunload = function(e) {
+			return "Do you want to exit this page?";
+		};
 		localStorage.clear();
 		var indice = 0;
 		var fileversion = "<%= version %>".split(",");

@@ -6,6 +6,9 @@ body {
     padding: 0;
     margin: 0;
 }
+.content {
+    min-height: 100vh !important;
+}
 .top-bar {
     background-image: linear-gradient(to bottom right, #fff, #eee, #ddd);
     box-shadow:  0 2px 2px -2px gray;
@@ -126,6 +129,8 @@ td, th {
 .hidden-page {
     position: fixed;
     visibility: hidden !important;
+    animation: fadeout 0.5s both;
+    opacity: 1;
 }
 
 .form-legend {
@@ -194,4 +199,42 @@ fieldset {
 }
 .succes{
     color: green;
+}
+.deleted {
+    display: none !important;
+}
+.active-page {
+    animation: fadein 0.5s both;
+    opacity: 0;
+}
+
+.showing-page, section {
+    animation: fadein 0.5s both;
+    opacity: 0;
+}
+@keyframes fadein {
+    0% { opacity: 0; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+@keyframes fadeout {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 0; }
+}
+@keyframes clin {
+    0% { border: 2px dashed #002fff; }
+    100% { border: 2px dashed #a7c2f5; }
+}
+
+.img-focused {
+    border: 2px dashed #002fff;
+    animation: clin 0.5s infinite;
+}
+.image {
+    border: 2px dashed transparent;
+}
+.image:hover {
+    cursor: pointer;
+    border: 2px dashed #a8b8ff;
 }
