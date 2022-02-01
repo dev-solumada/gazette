@@ -30,6 +30,12 @@ function addPage(page = document.createElement('div')) {
     fieldset.innerHTML += getPages(0).innerHTML;
     page.classList.add('active-page');
     page.append(fieldset);
+    // chercher img tag
+    let imgTag = page.firstElementChild.firstElementChild.nextElementSibling.lastElementChild.
+        firstElementChild.lastElementChild.firstElementChild.nextElementSibling.firstElementChild.firstElementChild.firstElementChild.nextElementSibling;
+    imgTag.src = '/placeholder.png';
+    imgTag.width = '150';
+    imgTag.height = '150';
     // hide all page
     hideAllPage();
     // afficher
@@ -74,13 +80,11 @@ function deletePage(btn) {
             hidePage(page);
             page.remove();
             span1.textContent = 'Number of page: ' + getPages().length;
-            // showPageOn(Array.from(getPages()).length - 1);
             if (getPages().length <= 1) {
                 bPrev.disabled = true;
                 bNext.disabled = true;
                 bNext.classList.replace('btn-dark', 'btn-light');
                 bPrev.classList.replace('btn-dark', 'btn-light');
-                // alert('helo')
             } 
         }
     });
