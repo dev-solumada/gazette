@@ -31,7 +31,7 @@ function addPage(page = document.createElement('div')) {
     page.classList.add('active-page');
     page.append(fieldset);
     // chercher img tag
-    let imgTag = page.firstElementChild.firstElementChild.nextElementSibling.lastElementChild.
+    let imgTag = page.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.lastElementChild.
         firstElementChild.lastElementChild.firstElementChild.nextElementSibling.firstElementChild.firstElementChild.firstElementChild.nextElementSibling;
     imgTag.src = '/placeholder.png';
     imgTag.width = '150';
@@ -51,8 +51,8 @@ function addNewPage(btn) {
 // supprimer une page
 function deletePage(btn) {
     swal({
-        title: "Do you want to delete this page?",  
-        text: "All of the data on this page may be lost.", 
+        title: "Do you want to delete this section?",  
+        text: "All of the data on this section may be lost.", 
         icon: "warning",
         buttons: {
           cancel: "No",
@@ -79,7 +79,7 @@ function deletePage(btn) {
         
             hidePage(page);
             page.remove();
-            span1.textContent = 'Number of page: ' + getPages().length;
+            span1.textContent = 'Number of pages: ' + getPages().length;
             if (getPages().length <= 1) {
                 bPrev.disabled = true;
                 bNext.disabled = true;
@@ -110,7 +110,7 @@ function showBtnControllerPage(div = document.createElement("div")) {
     div.innerHTML = '';
     const span1 = document.createElement('span');
     span1.className = 'badge bg-primary mx-4';
-    span1.textContent = 'Number of page: ' + getPages().length;
+    span1.textContent = 'Number of pages: ' + getPages().length;
     const btnPrev = document.createElement('button');
     const btnNext = document.createElement('button');
     btnNext.innerHTML = 'Next &xrArr;';

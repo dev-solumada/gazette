@@ -1,3 +1,4 @@
+
 function openFile(file) {
   var f = new XMLHttpRequest();
   f.open("GET", file, false);
@@ -25,7 +26,7 @@ function getLastForm() {
  var img = document.getElementById("pdf");
  function uploadPDF(){
      document.getElementById("show").setAttribute("data",URL.createObjectURL(img.files[0]));
-     document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100% !important;zoom: 0% !important;');
+     document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100vh !important;zoom: 0% !important;');
  }
 
 
@@ -130,7 +131,10 @@ var Pages = {}
 
 // get all input values of page2
 function getPage2Values() {
-                        
+  
+  // navbar fixed on scroll  
+  window.addEventListener('scroll', onScroll);
+
   var chap = document.getElementById("chapitre").value;
   // local storage variables
   localStorage.setItem('chap', chap);
@@ -239,29 +243,7 @@ function getPage2Values() {
     showSection(e.target.value);
     localStorage.setItem('prevchap', e.target.value);
   });
-  
 
-}
-
-function g(nextchap_select) {
-  let chap_field = document.getElementById(nextchap_select.value);
-    // cacher tous les form
-    for (const form of document.forms)
-     form.classList.add('hidden-page');
-    // si la page existe
-    if (chap_field) {
-      chap_field.classList.remove('hidden-page');
-    } else {
-      // si la page n'éxiste pas, on va donner un id
-      appendFile('plateforme/page3.html');
-      getLastForm().id = nextchap_select.value;
-      chap_field = document.getElementById(nextchap_select.value);
-      chap_field.classList.remove('hidden-page');
-      displayAvailableChaptersForNext(nextchap_select.value, localStorage.getItem('GAZC').toUpperCase());
-      document.querySelectorAll('.nextchap')[Array.from(document.forms).indexOf(getLastForm())].addEventListener('change', (e) => {
-        g(e.target);
-      })
-    }
 }
 
 // revenir dans la première page
@@ -280,6 +262,10 @@ function previousToPage1() {
 // revenir dans la deuxième page
 function previousToPage2() {
   if (confirm("Do you want to exit this page? Some recordings may be lost.")) {
+    document.getElementById('navbar_top').classList.remove('fixed-top');
+		// remove navbar fixed on scroll  
+		window.removeEventListener('scroll', onScroll);
+
     let page = document.getElementById('left-page');
     let pageLeft = page.innerHTML;
     localStorage.setItem('pageLeft', pageLeft);
@@ -475,6 +461,13 @@ function cancel() {
  * Chapitre suivant
  */
 
-function nextChapter() {
-  
+function onScroll() {
+  navbar_height = document.getElementById('navbar_top').offsetHeight;
+  if (window.scrollY > 0) {
+    document.getElementById('navbar_top').classList.add('fixed-top');
+  } else {
+    document.getElementById('navbar_top').classList.remove('fixed-top');
+    // remove padding top from body
+    document.body.style.paddingTop = '0';
+  }
 }

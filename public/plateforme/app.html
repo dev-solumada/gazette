@@ -12,6 +12,7 @@
 		</div>
 
 		<div class="page-to-repeat active-page">
+			<input type="hidden" id="start_mark">
 			<div class="row">
 				<div class="col-md-7 col-lg-7 col-xl-7 p-1" id="ident-col-1">
 					<!-- Field set Identifier -->
@@ -271,7 +272,7 @@
 					</fieldset>
 				</div>
 			</div>
-			
+			<input type="hidden" id="end_mark">
 		</div>
 		
 
@@ -281,7 +282,7 @@
 					<button type="button" onclick="addNewPage(this)" class="btn btn-primary"><B class="text-white">&#x2b; Add Mark</B></button>
 				</div>
 				<div class="float-end text-end">
-					<span class="badge bg-primary mx-4">Number of page: 1</span>
+					<span class="badge bg-primary mx-4">Number of pages: 1</span>
 					<button type="button" class="btn btn-light text-white">&xlArr; Previous</button>
 					<span class="badge text-white bg-dark mx-1">1</span>
 					<button type="button" class="btn btn-light text-white">Next &xrArr;</button>
