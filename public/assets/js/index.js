@@ -50,74 +50,75 @@ function getPage1Values() {
   let validation = true;
   // vider la liste
   showWarnings();
-  // gestion d'erreur
-  if (pays.value === '') {
-    showWarnings(pays_input, "Select the country.");
-    validation = false;
-  }
-  if (number.trim().length == 0) {
-    showWarnings(number_input, "Number of Gazette is empty.");
-    validation = false;
-  }
-  if (!isDate(date)) {
-    showWarnings(date_input, "Date of Gazette is invalid.");
-    validation = false;
-  }
-  if (!isDate(date_p)) {
-    showWarnings(datep_input, "Date of Publication is invalid.");
-    validation = false;
-  }
+  
   // non fichier séléctionné
   if(pdf_viewer.data.includes('/pdf_paceholder.png')) {
     showWarnings(pdf_viewer, 'Please, open a PDF file.')
     validation = false;
-  }
-
-  /* Affiche le popup */
-  let ul = document.createElement('ul');
-  var wul = document.querySelectorAll('#warnings-ul > li');
-  for (const li_ of wul) {
-    let li = document.createElement('li');
-    li.innerHTML = li_.childNodes[0].textContent;
-    li.className = 'text-start text-danger';
-    ul.appendChild(li);
-  }
-  if (!validation) {
-    swal({
-      title: "Are you sure to pass this step?",  
-      text: "There are some warnings:", 
-      icon: "warning",
-      content: ul,
-      buttons: {
-        cancel: "No",
-        confirm: "Yes"
-    }
-    }).then( val => {
-      if(val) {
-        // go to next
-        // local storage variables
-        localStorage.setItem('GAZC', pays);
-        localStorage.setItem('GAZD', date);
-        localStorage.setItem('GAZN', number);
-        localStorage.setItem('GAZP', date_p);
-        showWarnings();
-        openFile('plateforme/page2.html');
-        // afficher les chapitre valable pour le pays séléctionné
-        displayAvailableChapters(localStorage.getItem('GAZC').toUpperCase());
-      }
-    }); 
   } else {
-    // local storage variables
-    localStorage.setItem('GAZC', pays);
-    localStorage.setItem('GAZD', date);
-    localStorage.setItem('GAZN', number);
-    localStorage.setItem('GAZP', date_p);
-    showWarnings();
-    openFile('plateforme/page2.html');
-    // afficher les chapitre valable pour le pays séléctionné
-    displayAvailableChapters(localStorage.getItem('GAZC').toUpperCase());
-  }
+    // gestion d'erreur
+    if (pays.value === '') {
+      showWarnings(pays_input, "Select the country.");
+      validation = false;
+    }
+    if (number.trim().length == 0) {
+      showWarnings(number_input, "Number of Gazette is empty.");
+      validation = false;
+    }
+    if (!isDate(date)) {
+      showWarnings(date_input, "Date of Gazette is invalid.");
+      validation = false;
+    }
+    if (!isDate(date_p)) {
+      showWarnings(datep_input, "Date of Publication is invalid.");
+      validation = false;
+    }
   
+    /* Affiche le popup */
+    let ul = document.createElement('ul');
+    var wul = document.querySelectorAll('#warnings-ul > li');
+    for (const li_ of wul) {
+      let li = document.createElement('li');
+      li.innerHTML = li_.childNodes[0].textContent;
+      li.className = 'text-start text-danger';
+      ul.appendChild(li);
+    }
+    if (!validation) {
+      swal({
+        title: "Are you sure to pass this step?",  
+        text: "There are some warnings:", 
+        icon: "warning",
+        content: ul,
+        buttons: {
+          cancel: "No",
+          confirm: "Yes"
+      }
+      }).then( val => {
+        if(val) {
+          // go to next
+          // local storage variables
+          localStorage.setItem('GAZC', pays);
+          localStorage.setItem('GAZD', date);
+          localStorage.setItem('GAZN', number);
+          localStorage.setItem('GAZP', date_p);
+          showWarnings();
+          openFile('plateforme/page2.html');
+          // afficher les chapitre valable pour le pays séléctionné
+          displayAvailableChapters(localStorage.getItem('GAZC').toUpperCase());
+        }
+      }); 
+    } else {
+      // local storage variables
+      localStorage.setItem('GAZC', pays);
+      localStorage.setItem('GAZD', date);
+      localStorage.setItem('GAZN', number);
+      localStorage.setItem('GAZP', date_p);
+      showWarnings();
+      openFile('plateforme/page2.html');
+      // afficher les chapitre valable pour le pays séléctionné
+      displayAvailableChapters(localStorage.getItem('GAZC').toUpperCase());
+    }
+  }
 }
 
 // vérifier une date
