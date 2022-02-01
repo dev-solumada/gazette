@@ -23,14 +23,28 @@ function downloadData(contentType,data,filename){
 function fromToXml(form){
     var xmldata=['<?xml version="1.0"?>'];
     xmldata.push("<form>");
+    xmldata.push('\t<InfoGazette>');
     var inputs=form.elements;
     for(var i=0;i<inputs.length;i++){
+      // create chapter tag
+      if (inputs[i].name === 'chapters') {
+        xmldata.push(`\t<chapter name="${inputs[i].name}" value="${new String(inputs[i].value)}">`);
+        continue;
+      }
+      // create element tag
       var el=document.createElement("ELEMENT");
       if (inputs[i].name && !inputs[i].disabled){
         el.setAttribute("name",inputs[i].name);
         el.setAttribute("value",new String(inputs[i].value));
-        xmldata.push(el.outerHTML);
+        xmldata.push('\t\t' + el.outerHTML);
       }
+      // close InfoGazette tag
+      if (inputs[i].name === '400-publication')
+        xmldata.push('\t</InfoGazette>');
+      // close chapter tag
+      if (inputs[i].name === '571')
+        xmldata.push('\t</chapter>');
+
     }
     xmldata.push("</form>");
     return xmldata.join("\n");
