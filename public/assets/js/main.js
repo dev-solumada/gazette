@@ -34,13 +34,12 @@ function fromToXml(form){
       // create mark tag
       if (inputs[i].id === 'start_mark')
         xmldata.push(`\t\t<mark>`);
-      var tabulation = inputs[i].name === '571' ? '\t\t' : '\t\t\t';
       // create element tag
       var el=document.createElement("ELEMENT");
       if (inputs[i].name && !inputs[i].disabled){
         el.setAttribute("name",inputs[i].name);
         el.setAttribute("value",new String(inputs[i].value));
-        xmldata.push(tabulation + el.outerHTML);
+        xmldata.push('\t\t\t' + el.outerHTML);
       }
       // close InfoGazette tag
       if (inputs[i].name === '400-publication')
@@ -49,7 +48,7 @@ function fromToXml(form){
       if (inputs[i].id === 'end_mark')
         xmldata.push('\t\t</mark>');
       // close chapter tag
-      if (inputs[i].name === '571')
+      if (inputs[i].id === 'end_chap')
         xmldata.push('\t</chapter>');
 
     }
