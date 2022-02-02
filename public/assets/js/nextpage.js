@@ -36,6 +36,7 @@ function addPage(page = document.createElement('div')) {
     imgTag.src = '/placeholder.png';
     imgTag.width = '150';
     imgTag.height = '150';
+    imgTag.className = 'image';
     // hide all page
     hideAllPage();
     // afficher
@@ -52,7 +53,7 @@ function addNewPage(btn) {
 function deletePage(btn) {
     swal({
         title: "Do you want to delete this section?",  
-        text: "All of the data on this section may be lost.", 
+        text: "All data in this section may be lost.", 
         icon: "warning",
         buttons: {
           cancel: "No",

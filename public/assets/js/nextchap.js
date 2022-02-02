@@ -49,7 +49,7 @@ function showSection(id) {
 function deleteSection(e) {
     swal({
         title: "Do you want to delete this field?",  
-        text: "All of the data on this page may be lost.", 
+        text: "All data in this chapter may be lost.", 
         icon: "warning",
         buttons: {
           cancel: "No",
