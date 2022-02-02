@@ -78,9 +78,7 @@ function addelementapp(e){
             else{
                 let elementtdname = document.createElement("td");
                 let elementimg = document.createElement("img");
-                elementimg.addEventListener("click", () => {
-                    elementimg.parentElement.parentElement.remove();
-                });
+                elementimg.setAttribute("onclick", 'deleteRow(this)');
                 elementimg.setAttribute("src",'assets/images/Delete-icon.png');
                 elementimg.setAttribute("class","btn");
                 elementimg.setAttribute("width",'24px');
@@ -144,9 +142,7 @@ function addelementowner(e){
             else{
                 let elementtdname = document.createElement("td");
                 let elementimg = document.createElement("img");
-                elementimg.addEventListener("click", () => {
-                    elementimg.parentElement.parentElement.remove();
-                });
+                elementimg.setAttribute("onclick", 'deleteRow(this)');
                 elementimg.setAttribute("src",'assets/images/Delete-icon.png');
                 elementimg.setAttribute("class","btn");
                 elementimg.setAttribute("width",'24px');
@@ -210,9 +206,7 @@ function addelementpowner(e){
             else{
                 let elementtdname = document.createElement("td");
                 let elementimg = document.createElement("img");
-                elementimg.addEventListener("click", () => {
-                    elementimg.parentElement.parentElement.remove();
-                });
+                elementimg.setAttribute("onclick", 'deleteRow(this)');
                 elementimg.setAttribute("src",'/Delete-icon.png');
                 elementimg.setAttribute("class","btn");
                 elementimg.setAttribute("width",'24px');
@@ -268,9 +262,7 @@ function addelementagt(e){
             else{
                 let elementtdname = document.createElement("td");
                 let elementimg = document.createElement("img");
-                elementimg.addEventListener("click", () => {
-                    elementimg.parentElement.parentElement.remove();
-                });
+                elementimg.setAttribute("onclick", 'deleteRow(this)');
                 elementimg.setAttribute("src",'assets/images/Delete-icon.png')
                 elementimg.setAttribute("class","btn");
                 elementimg.setAttribute("width",'24px');
@@ -336,9 +328,7 @@ function addelementnice(e){
             else{
                 let elementtdname = document.createElement("td");
                 let elementimg = document.createElement("img");
-                elementimg.addEventListener("click", () => {
-                    elementimg.parentElement.parentElement.remove();
-                });
+                elementimg.setAttribute("onclick", 'deleteRow(this)');
                 elementimg.setAttribute("src",'assets/images/Delete-icon.png');
                 elementimg.setAttribute("class","btn");
                 elementimg.setAttribute("width",'24px');
@@ -355,4 +345,8 @@ function addelementnice(e){
     
     }
     callScripts(); // method from main.js
+}
+
+function deleteRow(btn) {
+    btn.parentElement.parentElement.remove();
 }

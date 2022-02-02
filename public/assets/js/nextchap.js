@@ -73,7 +73,7 @@ function deleteSection(e) {
             showFinishedChapter();
             // verifier
             if (chapterPage_Array.some(e => e.classList.contains('showing-page') && e.classList.contains('deleted'))) {
-                showSection(chapterPage_Array.find(e => !e.classList.contains('showing-page')).id)
+                showSection(chapterPage_Array.find(e => !e.classList.contains('deleted')).id)
             }
             // set select value
             document.getElementById('nextchap').value = section1.id;

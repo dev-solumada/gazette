@@ -11,7 +11,7 @@
     <body>
         <div class="container-fluid">
 			<!-- <fieldset class="bg-white"> -->
-				<div class="row top-bar">
+				<div class="row top-bar" id="navbar_top">
 					<div class="col-md-12">
 						<span class="form-legend text-primary">Formulaire Gazette</span>
 						<div class="float-end">
@@ -53,7 +53,7 @@
 						<div class="form-group my-2">
 							<input type="file" accept="application/pdf" class="form-control" id="pdf" aria-describedby="helpId" placeholder="" onchange="uploadPDF()">
 						</div>
-						<object id="show" data="/pdf_paceholder.png" style="width:100% !important;height: 100vh !important;zoom: 0% !important;" >
+						<object id="show" data="/pdf_paceholder.png" style="width:100% !important;height: auto !important;zoom: 0% !important;" >
 							Your browser does not support PDFs
 						</object>
 					</div>
@@ -86,34 +86,32 @@
 			
 			
 			var breaks = false;
-		filesDone.forEach(function (d){
-				
-			if(d == document.getElementById("pdf").files[0].name){
-				let warn = document.getElementById("warnings-ul");
-				warn.innerHTML ="";
-				let li = document.createElement("li");
-				li.setAttribute("style","font-weight:500;");
-				li.setAttribute("class","col-md-6 succes");
-				let info = "The pdf " + d +" has already been processed";
-				let text = document.createTextNode(info);
-				li.appendChild(text);
-				warn.appendChild(li);
-				document.getElementById("already").setAttribute("value",info);
-				breaks = true;
-				localStorage.setItem("version",parseInt(fileversion[indice]) + 1);
-				
-			}
-			else{
-				if (breaks == false){
-					indice++;
+			filesDone.forEach(function (d){
+				if(d == document.getElementById("pdf").files[0].name){
 					let warn = document.getElementById("warnings-ul");
 					warn.innerHTML ="";
-					document.getElementById("already").setAttribute("value","");
-					localStorage.setItem("version",1);
-				}	
-			}
-			
-		})
+					let li = document.createElement("li");
+					li.setAttribute("style","font-weight:500;");
+					li.setAttribute("class","col-md-6 succes");
+					let info = "The pdf " + d +" has already been processed";
+					let text = document.createTextNode(info);
+					li.appendChild(text);
+					warn.appendChild(li);
+					document.getElementById("already").setAttribute("value",info);
+					breaks = true;
+					localStorage.setItem("version",parseInt(fileversion[indice]) + 1);
+					
+				}
+				else{
+					if (breaks == false){
+						indice++;
+						let warn = document.getElementById("warnings-ul");
+						warn.innerHTML ="";
+						document.getElementById("already").setAttribute("value","");
+						localStorage.setItem("version",1);
+					}	
+				}
+			})
 		})
     </script>
     </body>

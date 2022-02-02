@@ -6,13 +6,11 @@ body {
     padding: 0;
     margin: 0;
 }
-.content {
-    min-height: 100vh !important;
-}
 .top-bar {
     background-image: linear-gradient(to bottom right, #fff, #eee, #ddd);
     box-shadow:  0 2px 2px -2px gray;
     padding: 14px 3px;
+    height: 90px;
 }
 .color-ff {
     background-color: #ffffff;
@@ -237,4 +235,13 @@ fieldset {
 .image:hover {
     cursor: pointer;
     border: 2px dashed #a8b8ff;
+}
+.fixed-top {
+    position: fixed;
+    width: 100%;
+    z-index: 1 !important;
+    box-shadow:  0 2px 8px -2px rgba(0, 0, 0, 0.418);
+}
+#navbar_top {
+    transition: all ease-out 1s;
 }
