@@ -30,6 +30,14 @@ function addPage(page = document.createElement('div')) {
     fieldset.innerHTML += getPages(0).innerHTML;
     page.classList.add('active-page');
     page.append(fieldset);
+
+    for (let input of page.getElementsByClassName('select')) {
+        if (input.type === 'textarea') 
+            input.textContent = '';
+        else
+            input.setAttribute('value', '');
+    }
+
     // chercher img tag
     let imgTag = page.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.lastElementChild.
         firstElementChild.lastElementChild.firstElementChild.nextElementSibling.firstElementChild.firstElementChild.firstElementChild.nextElementSibling;

@@ -25,6 +25,7 @@ function fromToXml(form){
     xmldata.push("<form>");
     xmldata.push('\t<InfoGazette>');
     var inputs=form.elements;
+    var eltab = '\t\t';
     for(var i=0;i<inputs.length;i++){
       // create chapter tag
       if (inputs[i].name === 'chapters') {
@@ -39,7 +40,10 @@ function fromToXml(form){
       if (inputs[i].name && !inputs[i].disabled){
         el.setAttribute("name",inputs[i].name);
         el.setAttribute("value",new String(inputs[i].value));
-        xmldata.push('\t\t\t' + el.outerHTML);
+        xmldata.push(eltab + el.outerHTML);
+      }
+      if (inputs[i].name === '400-publication') {
+        eltab = '\t\t\t';
       }
       // close InfoGazette tag
       if (inputs[i].name === '400-publication')
@@ -444,4 +448,178 @@ function handler(img) {
     img.classList.add('img-focused');
     clickedImg = img;
   }
+}
+
+
+
+/**
+ * Save data
+ */
+
+function saveData() {
+
+  swal({
+    title: "Do you want to save your data?",  
+    text: "", 
+    icon: "warning",
+    content: '',
+    buttons: {
+      cancel: "No",
+      confirm: "Yes"
+    }
+  }).then( val => {
+    if (val) {
+      const selects = document.querySelectorAll('#gazette-form .select');
+      for (let i = 0; i < selects.length; i++) {
+        selects[i].classList.add('saved-' + (i+1));
+        if (selects[i].type === 'textarea') {
+          selects[i].textContent =  selects[i].value;
+          console.log(selects[i]);
+        } else {
+          selects[i].setAttribute('value', selects[i].value);
+        }
+      }
+      const data = document.getElementById('left-page').innerHTML;
+    
+      const fileName = localStorage.getItem('pdf_name');
+      const prevchap = localStorage.getItem('prevchap');
+      const GAZC = localStorage.getItem('GAZC');
+      var filepath = `${fileName}__${GAZC}__${prevchap}.gs`;
+      var html = new String(data).replace(/\n/g, "");
+          html = html.replace(/\t/g, "");
+      sendDataRequest('/save', filepath, html);
+    }
+  });
+
+}
+
+//sending request in server
+function sendDataRequest(url, filename, data) {
+  var http = new XMLHttpRequest();
+  http.open("POST", url, true);
+  http.setRequestHeader(
+    "Content-type",
+    "application/json"
+  );
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      let json = JSON.parse(this.responseText);
+      if (json.status === 'ok') {
+        swal({
+          title: "Your data is successfully saved!",  
+          text: "", 
+          icon: "success",
+          content: '',
+          buttons: {
+            confirm: "OK"
+          }
+        })
+      }
+    }
+  };
+  let json = JSON.stringify({filename: filename, data: data})
+
+  http.send(json);
+}
+
+function checkSaveRequest(url,filename) {
+  var http = new XMLHttpRequest();
+  http.open("POST", url, true);
+  http.setRequestHeader(
+    "Content-type",
+    "application/x-www-form-urlencoded"
+  );
+  http.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      let json = JSON.parse(this.responseText);
+      if (json.status === 'ok') {
+        swal({
+        	title: "You have a backup!",  
+        	text: " Do you want to continue it?", 
+        	icon: "warning",
+        	content: '',
+        	buttons: {
+        		cancel: "No",
+        		confirm: "Yes"
+        	}
+        }).then( val => {
+        	if(val) {
+            // afficher le fichier
+            openFile('/' + json.filename);
+            // navbar fixed on scroll  
+            window.scrollTo(0, 0);
+            window.addEventListener('scroll', onScroll);
+            // localstorage
+            let prevchap = json.filename.split('__')[2].split('.')[0];
+            let gazd = document.getElementById('GAZD').value;
+            let gazn = document.getElementById('GAZN').value;
+            let gazp = document.getElementById('GAZP').value;
+            let gazc = document.getElementById('GAZC').value;
+            localStorage.setItem('GAZC', gazc);
+            localStorage.setItem('GAZD', gazd);
+            localStorage.setItem('GAZN', gazn);
+            localStorage.setItem('GAZP', gazp);
+            localStorage.setItem('prevchap', prevchap);
+            localStorage.setItem('chap', prevchap);
+
+            let pagesbtn = document.querySelectorAll('.page-buttons');
+            for (let pagebtn of pagesbtn) {
+              let btnfield = pagebtn.firstElementChild.lastElementChild;
+              let btnPrev = btnfield.firstElementChild.nextElementSibling;
+              let span = btnPrev.nextElementSibling;
+              let btnNext = span.nextElementSibling;
+              btnNext.addEventListener('click', function() {nextPage(btnPrev, span, btnNext)});
+              btnPrev.addEventListener('click', function() {prevPage(btnPrev, span, btnNext)});
+              // nextPage(btnPrev, span, btnNext);
+
+              chapterPage_Array = [];
+              // section array
+              for (let section of document.querySelectorAll('section')) {
+                chapterPage_Array.push(section);
+              }
+              
+              // Créer les page pour chapitre
+              let chapters = getAvailableChapter(localStorage.getItem('GAZC').toUpperCase());
+              Object.keys(chapters).forEach(key => {
+                chapters[key].forEach(value => {
+                  if (chapterPage_Array.some(e => e.id !== value)) {
+                    // field set
+                    let fieldset = document.createElement('fieldset');
+                    let legend = document.createElement('legend');
+                    legend.className = 'text-end';
+                    let img = document.createElement('img');
+                    img.src = '/Delete-icon.png';
+                    img.className="btn";
+                    img.width="24";
+                    img.height="24";
+                    img.setAttribute('onclick', "deleteSection(this)");
+                    legend.append(img);
+                    fieldset.append(legend);
+                    let section = document.createElement('section');
+                    let sectionContent = value.includes("APP") ? getSectionContentFile('/app.html') : getSectionContentFile('/originalsection.html');
+                    fieldset.innerHTML += sectionContent;
+                    section.append(fieldset);
+                    section.id = value; 
+                    section.className = 'hidden-page deleted mt-2';
+                    let select = section.firstChild.firstChild.nextSibling.nextSibling.firstChild.nextSibling.firstChild.nextSibling.nextSibling.nextSibling.firstChild.nextSibling.nextSibling.nextSibling;
+                    select.innerHTML = `<option value="${value}">${value}</option>`;
+                    let pageButtons = section.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.nextElementSibling;
+                    if (pageButtons.classList.contains('page-buttons')); 
+                      pageButtons.classList.add('pagebtn-' + value);
+
+                    // page to repat
+                    let pageToRepeat = section.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling;
+                    pageToRepeat.className = 'page-to-repeat-' + value     + ' active-page';
+                    
+                    chapterPage_Array.push(section);
+                  }
+                })
+              })
+            }
+        	}
+        }); 
+      }
+    }
+  };
+  http.send("filename=" + filename);
 }
