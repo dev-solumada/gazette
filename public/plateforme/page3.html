@@ -1,4 +1,4 @@
-<form action="" method="post" id="">
+<form action="" method="post" id="gazette-form">
 	
 	<!-- Gazette infos -->
 	<div class="row">
@@ -127,7 +127,7 @@
 										<legend><label for="540"><strong>540</strong> Figurative element </label></legend>
 										<img src="../assets/images/placeholder.png" onclick="handler(this)" alt="image" id="image" class="image" width="150px" height="150px">
 										<input type="file" id="inputFile" class="inputFile hide" id="540" accept="image/*" onchange="uploadImageFile()">
-										<input type="hidden" name="540" class="imagePath" value="">
+										<input type="hidden" name="540" class="imagePath select" value="">
 									</fieldset>
 								</div>
 							</div>
@@ -359,7 +359,7 @@
 				</div>
 			</div>
 		</div>
-	
+
 		<input type="hidden" id="end_chap">
 	</section>
 
@@ -376,7 +376,7 @@
 				<legend><label for="">Choose next chapter</label></legend>
 				<div class="row">
 					<div class="col-sm-12">
-						<select class="bg-light" id="nextchap">
+						<select class="bg-light" id="nextchap" onchange="nextchapter(this)">
 							<option value=""></option>
 						</select>
 					</div>
@@ -393,6 +393,9 @@
 			</div>
 			<div class="float-end">
 				<button type="button" class="btn btn-success py-1 px-3 mx-2" onclick="downloadXML()" id="submitButton"><B class="text-white">Gazette finish</B></button>
+			</div>
+			<div class="float-end">
+				<button type="button" class="btn btn-info py-1 px-3 mx-2" onclick="saveData()" id="saveBtn"><B class="text-white">Save Data</B></button>
 			</div>
 			<div class="float-end">
 				<button type="button" class="btn btn-danger py-1 px-3" onclick="cancel()" id="submitButton"><B class="text-white">Cancel</B></button>

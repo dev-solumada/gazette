@@ -118,10 +118,7 @@ function showFinishedChapter() {
             btn.className = 'btn '+ (!e.classList.contains('showing-page') ? 'btn-light text-dark' : 'btn-info text-white') +' float-start mr-2 px-3 my-2 sectionbtn';
             btn.type = "button";
             btn.target = e.id;
-            btn.addEventListener('click', function() {
-                showSection(this.target);
-                this.classList.replace('btn-dark', 'btn-danger');
-            })
+            btn.setAttribute('onclick', 'showSection("' + e.id +'")');
             document.getElementById('chapfinished').append(btn);
         }
     });

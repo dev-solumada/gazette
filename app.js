@@ -13,6 +13,7 @@ app.use(methodOverride("_method"));
 
 // Fichier static a utiliser
 app.use(express.static("public"));
+app.use(express.static('saves'));
 app.use(express.static('public/assets/css'));
 app.use(express.static('public/assets/js'));
 app.use(express.static('public/assets/images'));
@@ -26,8 +27,11 @@ app.set("views", __dirname + "/public");
 
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: "50mb"}));
 app.use("/", route);
+app.use('/fa', express.static(__dirname + '/node_modules/font-awesome/css'));
+app.use('/fonts', express.static(__dirname + '/node_modules/font-awesome/fonts'));
+
 
 const server = app.listen(process.env.PORT || PORT, () => {
   const port = server.address().port;

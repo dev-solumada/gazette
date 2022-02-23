@@ -25,8 +25,12 @@ function getLastForm() {
  */
  var img = document.getElementById("pdf");
  function uploadPDF(){
-     document.getElementById("show").setAttribute("data",URL.createObjectURL(img.files[0]));
-     document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100vh !important;zoom: 0% !important;');
+    document.getElementById("show").setAttribute("data",URL.createObjectURL(img.files[0]));
+    document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100vh !important;zoom: 0% !important;');
+    // verification du sauvegarde
+    const filename = img.files[0].name.split('.')[0];
+    localStorage.setItem('pdf_name', filename);
+    checkSaveRequest('/checksave', filename);
  }
 
 
@@ -233,17 +237,14 @@ function getPage2Values() {
   })
 
   showFinishedChapter();
-  
+}
 
-  // action sur choisir nextchapter
-  const nextchap_select = document.querySelector('#nextchap');
-  nextchap_select.addEventListener('change', (e) => {
-    if (e.target.value === '') return;
-    appendSection(e.target.value)
-    showSection(e.target.value);
-    localStorage.setItem('prevchap', e.target.value);
-  });
-
+// action sur choisir nextchapter
+function nextchapter(e) {
+  if (e.value === '') return;
+  appendSection(e.value)
+  showSection(e.value);
+  localStorage.setItem('prevchap', e.value);
 }
 
 // revenir dans la première page
@@ -362,6 +363,8 @@ function downloadXML() {
   // effacer tous les avertissements
   document.getElementById('warnings-ul').innerHTML = '';
 
+  var pdf_name = (document.getElementById("pdf").files > 0) ? document.getElementById("pdf").files[0].name : localStorage.getItem('pdf_name')+'.pdf';
+
   if (!validation) {
     swal({
       title: "Are you to download the file?",  
@@ -385,11 +388,11 @@ function downloadXML() {
         let GAZD = dateStr.replace('-', '').replace('-', '');
         if (localStorage.getItem('version') != 1 ){
           download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
-          sendRequest("/download",document.getElementById("pdf").files[0].name);
+          sendRequest("/download",pdf_name);
         }
         else{
           download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
-          sendRequest("/download",document.getElementById("pdf").files[0].name);
+          sendRequest("/download",pdf_name);
         } 
 
         showWarnings();
@@ -410,10 +413,10 @@ function downloadXML() {
     // telecharger les ficher zip et xml
     if (localStorage.getItem('version') != 1 ){
       download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}_V${localStorage.getItem('version')}`);
-      sendRequest("/download",document.getElementById("pdf").files[0].name);
+      sendRequest("/download",pdf_name);
     } else {
       download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
-      sendRequest("/download",document.getElementById("pdf").files[0].name);
+      sendRequest("/download",pdf_name);
     }
     showWarnings();
   } 
@@ -428,7 +431,11 @@ function sendRequest(url,filename) {
   );
   http.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
-      window.location = "/";
+      let json = JSON.parse(this.responseText);
+      if (json.status === 1) {
+        window.onbeforeunload = function() {};
+        window.location = "/";
+      }
     }
   };
   http.send("filename=" + filename +"&version="+localStorage.getItem('version'));
@@ -450,6 +457,7 @@ function cancel() {
   })
   .then((willDelete) => {
     if (willDelete) {
+      window.onbeforeunload = function() {};
       window.location.href = '/';
     } else {
       swal("Your data is safe!");
