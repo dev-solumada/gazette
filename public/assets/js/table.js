@@ -33,14 +33,14 @@ function fieldemptynice(f1,f2,app){
 }
 
 function addelementapp(e){
-    const table = e.parentElement.parentElement.nextSibling.nextSibling;
+    const table = e.parentElement.parentElement.nextElementSibling;
     let parentElement1 = document.getElementsByName('731-name')[0];
     let parentElement2 = document.getElementsByName('731-address')[0];
     let parentElement3 = document.getElementsByName('731-country')[0];
     if (parentElement1.hasAttribute('disabled') && parentElement2.hasAttribute('disabled') && parentElement3.hasAttribute('disabled')) return;
-    if (table.childNodes[3].childElementCount < 5){
+    if (table.rows.length - 1 < 5) {
         let step =0;
-        let apllicant = table.childNodes[3];
+        let apllicant = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trapp"+number_trapp);
         while(step <= 3 ){
@@ -97,14 +97,14 @@ function addelementapp(e){
 }
 
 function addelementowner(e){
-    const table = e.parentElement.parentElement.nextSibling.nextSibling;
+    const table = e.parentElement.parentElement.nextElementSibling;
     let parentElement1 = document.getElementsByName('732-name')[0];
     let parentElement2 = document.getElementsByName('732-address')[0];
     let parentElement3 = document.getElementsByName('732-country')[0];
     if (parentElement1.hasAttribute('disabled') && parentElement2.hasAttribute('disabled') && parentElement3.hasAttribute('disabled')) return;
-    if (table.childNodes[3].childElementCount < 5){
+    if (table.rows.length - 1 < 5){
         let step =0;
-        let apllicant = table.childNodes[3];
+        let apllicant = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trowner"+number_trowner);
         while(step <= 3 ){
@@ -161,14 +161,14 @@ function addelementowner(e){
 }
 
 function addelementpowner(e){
-    const table = e.parentElement.parentElement.nextSibling.nextSibling;
+    const table = e.parentElement.parentElement.nextElementSibling;
     let parentElement1 = document.getElementsByName('770-name')[0];
     let parentElement2 = document.getElementsByName('770-address')[0];
     let parentElement3 = document.getElementsByName('770-country')[0];
     if (parentElement1.hasAttribute('disabled') && parentElement2.hasAttribute('disabled') && parentElement3.hasAttribute('disabled')) return;
-    if (table.childNodes[3].childElementCount < 5){
+    if (table.rows.length - 1 < 5){
         let step =0;
-        let apllicant = table.childNodes[3];
+        let apllicant = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trpowner"+number_trpowner);
         while(step <= 3 ){
@@ -225,13 +225,13 @@ function addelementpowner(e){
 }
 
 function addelementagt(e){
-    const table = e.parentElement.parentElement.nextSibling.nextSibling;
+    const table = e.parentElement.parentElement.nextElementSibling;
     let parent740name = document.getElementsByName('740-name')[0];
     let parent740addres = document.getElementsByName('740-address')[0];
     let parent740country = document.getElementsByName('740-country')[0];
     if (parent740name.hasAttribute('disabled') && parent740addres.hasAttribute('disabled') && parent740country.hasAttribute('disabled') ) return;
-    if (table.childNodes[3].childElementCount < 5){
-        var apllicant = table.childNodes[3];
+    if (table.rows.length - 1 < 5){
+        var apllicant = table.lastElementChild;
         function field(name){
             let elementtdname = document.createElement("td");
             let elementinput = document.createElement("input");
@@ -279,10 +279,10 @@ function addelementagt(e){
     callScripts(); // method from main.js
 }
 function addelementnice(e){
-    const table = e.parentElement.parentElement.nextSibling.nextSibling;
-    if (table.childNodes[3].childElementCount < 5){
+    const table = e.parentElement.parentElement.nextElementSibling;
+    if (table.rows.length - 1 < 5){
         let step =0;
-        let apllicant = table.childNodes[3];
+        let apllicant = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trapp"+number_trnice);
         while(step <= 2 ){

@@ -32,24 +32,22 @@ routeExp.route("/").get(function (req, res) {
   var saveList = [];
   var fs = require("fs");
   fs.readdirSync('saves').forEach(function(file) {
-    saveList.push(file);
+    let d = file.split('-')[1].split('.')[0];
+    let filedate = new Date(parseInt(d));
+    let datenow = new Date(Date.now());
+    let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
+    var diffDays = timeDiff / (1000 * 3600 * 24); 
+    // supprimer le fichier après un jour
+    if (diffDays > 121) {
+      fs.unlinkSync('saves/'+file);
+    }
   });
 
   res.render("home.html",{dones : [], version: "null", bdfls: "null", saves: saveList});
 });
 
 routeExp.route("/download").post(function (req, res) {
-  var fs = require('fs');
   var filename = req.body.filename;
-  // verifier l'existence du fichier
-  var file = fs.readdirSync('saves', { withFileTypes: true })
-  .filter(dirent => dirent.isFile())
-  .find(dirent => dirent.name.includes(filename.split('.')[0]));
-  // delete file
-  if (file) {
-    fs.unlinkSync("saves/" + file.name);
-  }
-
   mongoose
     .connect(
       "mongodb+srv://solumada:vbcFPNKhZk0vcpfI@cluster0.t0vx8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority",
@@ -60,15 +58,15 @@ routeExp.route("/download").post(function (req, res) {
     )
     .then(async () => {
       var pdfDone = {
-        name: req.body.filename,
+        name: filename,
         treated_by: fullname.last_name,
         version: req.body.version,
       };
-      if (Bdfiles.indexOf(req.body.filename) === -1) {
+      if (Bdfiles.indexOf(filename) === -1) {
         await new PdfDoneSchema(pdfDone).save();
       } else {
         await PdfDoneSchema.findOneAndUpdate(
-          { id: req.body.filename },
+          { id: filename },
           { version: req.body.version }
         );
       }
@@ -90,8 +88,6 @@ routeExp.route('/save').post(function(req, res) {
   if (file) {
     fs.unlinkSync("saves/" + file.name);
   }
-
-
   fs.mkdir('saves', { recursive: true }, (err) => {
     if (err) throw err;
   });

@@ -31,16 +31,22 @@ function addPage(page = document.createElement('div')) {
     page.classList.add('active-page');
     page.append(fieldset);
 
+    console.log(page.getElementsByClassName('can-be-added'));
+    // tous les table doit avoir une seule ligne
+    for (let table of page.getElementsByClassName('can-be-added')) {
+        table_size = table.rows.length;
+        for (let i = table_size - 1; i > 1; i--) {
+            table.rows[i].remove();
+        }
+    }
     for (let input of page.getElementsByClassName('select')) {
         if (input.type === 'textarea') 
             input.textContent = '';
         else
             input.setAttribute('value', '');
     }
-
     // chercher img tag
-    let imgTag = page.firstElementChild.firstElementChild.nextElementSibling.nextElementSibling.lastElementChild.
-        firstElementChild.lastElementChild.firstElementChild.nextElementSibling.firstElementChild.firstElementChild.firstElementChild.nextElementSibling;
+    let imgTag = page.getElementsByClassName('page-image')[0];
     imgTag.src = '/placeholder.png';
     imgTag.width = '150';
     imgTag.height = '150';
