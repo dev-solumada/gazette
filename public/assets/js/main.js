@@ -534,9 +534,17 @@ function checkSaveRequest(url,filename) {
     if (this.readyState == 4 && this.status == 200) {
       let json = JSON.parse(this.responseText);
       if (json.status === 'ok') {
+        let file = json.filename;
+        let d = file.split('-')[1].split('.')[0];
+        let filedate = new Date(parseInt(d));
+        let datenow = new Date(Date.now());
+        let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
+        var diffDays = timeDiff / (1000 * 3600 * 24); 
+        let dayleft = Math.ceil(121 - diffDays)
+        var warn = dayleft + (dayleft < 2 ? ' day' : ' days') + ' remaining' ;
         swal({
-        	title: "You have a backup!",  
-        	text: " Do you want to continue it?", 
+        	title:"You have a backup!",  
+        	text: `${warn}. Do you want to continue it?`, 
         	icon: "warning",
         	content: '',
         	buttons: {
