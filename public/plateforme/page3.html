@@ -125,7 +125,7 @@
 									<!-- Reproduction of the mark * (image) -->
 									<fieldset>
 										<legend><label for="540"><strong>540</strong> Figurative element </label></legend>
-										<img src="../assets/images/placeholder.png" onclick="handler(this)" alt="image" id="image" class="image" width="150px" height="150px">
+										<img src="../assets/images/placeholder.png" onclick="handler(this)" alt="image" id="image" class="image page-image" width="150px" height="150px">
 										<input type="file" id="inputFile" class="inputFile hide" id="540" accept="image/*" onchange="uploadImageFile()">
 										<input type="hidden" name="540" class="imagePath select" value="">
 									</fieldset>
@@ -150,7 +150,7 @@
 					<fieldset>
 						<!-- Name and address of the applicant * (name and address) -->
 						<legend><label for="731"><strong>731</strong> Applicant <img src="../assets/images/Add-icon.png" class="btn" id="app_add" onclick="addelementapp(this)" width="20" height="20" style="position: relative;top: 3px;"></label></legend>
-						<table border="1">
+						<table border="1" class="can-be-added">
 							<thead class="color-cf" style="text-align: left;">
 								<th><label for="731">Name</label></th>
 								<th><label for="731">Address</label></th>
@@ -185,7 +185,7 @@
 						<legend><label for="732"><strong>732</strong> Owner <img src="../assets/images/Add-icon.png" class="btn"
 									id="app_add" onclick="addelementowner(this)" width="20" height="20"
 									style="position: relative;top: 3px;"></label></legend>
-						<table border="1">
+						<table border="1" class="can-be-added">
 							<thead class="color-cf" style="text-align: left;">
 								<th><label for="732">Name</label></th>
 								<th><label for="732">Address</label></th>
@@ -218,7 +218,7 @@
 					<fieldset>
 						<!-- Name and address of the applicant * (name and address) -->
 						<legend><label for="731"><strong>740</strong> Agent <img src="../assets/images/Add-icon.png" alt="..." class="btn" onclick="addelementagt(this)" id="appagt_add" width="20" height="20" style="position: relative;top: 3px;"></label></legend>
-						<table border="1">
+						<table border="1" class="can-be-added">
 							<thead class="color-cf" style="text-align: left;">
 								<th><label for="740-name">Name </label></th>
 								<th><label for="740-adress">Address </label></th>
@@ -248,7 +248,7 @@
 					<fieldset>
 						<!-- Nice classs Good&Services -->
 						<legend><label for="">Nice classes &nbsp;&nbsp;&nbsp; Good&Services <img src="../assets/images/Add-icon.png" alt="..." class="btn" onclick="addelementnice(this)" id="appnice_add" width="20" height="20" style="position: relative;top: 3px;"></label></legend>
-						<table border="1">
+						<table border="1" class="can-be-added">
 							<thead class="color-cf" style="text-align: left;">
 								<th><label for="511"><strong>511</strong> Nice class </label></th>
 								<th><label for="510"><strong>510</strong> List of G&S </label></th>
@@ -278,7 +278,7 @@
 						<legend><label for="770"><strong>770</strong> Previous Owner <img src="../assets/images/Add-icon.png" class="btn"
 									id="app_add" onclick="addelementpowner(this)" width="20" height="20"
 									style="position: relative;top: 3px;"></label></legend>
-						<table border="1">
+						<table border="1" class="can-be-added">
 							<thead class="color-cf" style="text-align: left;">
 								<th><label for="770">Name</label></th>
 								<th><label for="770">Address</label></th>
@@ -311,7 +311,7 @@
 					<fieldset>
 						<!--  -->
 						<legend><label for="">Priorities </label></legend>
-						<table border="1">
+						<table border="1" class="can-be-added">
 							<thead class="color-cf" style="text-align: left;">
 								<th><label for="300-country">Country </label></th>
 								<th><label for="300-date">Date </label></th>
@@ -345,7 +345,6 @@
 			<input type="hidden" id="end_mark">
 		</div>
 		
-
 		<div class="row page-buttons">
 			<div class="col-md-12 p-2">
 				<div class="float-start">

@@ -457,7 +457,6 @@ function handler(img) {
  */
 
 function saveData() {
-
   swal({
     title: "Do you want to save your data?",  
     text: "", 
@@ -469,28 +468,30 @@ function saveData() {
     }
   }).then( val => {
     if (val) {
-      const selects = document.querySelectorAll('#gazette-form .select');
-      for (let i = 0; i < selects.length; i++) {
-        selects[i].classList.add('saved-' + (i+1));
-        if (selects[i].type === 'textarea') {
-          selects[i].textContent =  selects[i].value;
-          console.log(selects[i]);
-        } else {
-          selects[i].setAttribute('value', selects[i].value);
-        }
-      }
-      const data = document.getElementById('left-page').innerHTML;
-    
-      const fileName = localStorage.getItem('pdf_name');
-      const prevchap = localStorage.getItem('prevchap');
-      const GAZC = localStorage.getItem('GAZC');
-      var filepath = `${fileName}__${GAZC}__${prevchap}.gs`;
-      var html = new String(data).replace(/\n/g, "");
-          html = html.replace(/\t/g, "");
-      sendDataRequest('/save', filepath, html);
+      backupData();
     }
   });
+}
 
+function backupData() {
+  const selects = document.querySelectorAll('#gazette-form .select');
+  for (let i = 0; i < selects.length; i++) {
+    selects[i].classList.add('saved-' + (i+1));
+    if (selects[i].type === 'textarea') {
+      selects[i].textContent =  selects[i].value;
+    } else {
+      selects[i].setAttribute('value', selects[i].value);
+    }
+  }
+  const data = document.getElementById('left-page').innerHTML;
+
+  const fileName = localStorage.getItem('pdf_name');
+  const prevchap = localStorage.getItem('prevchap');
+  const GAZC = localStorage.getItem('GAZC');
+  var filepath = `${fileName}__${GAZC}__${prevchap}-${Date.now()}.gs`;
+  var html = new String(data).replace(/\n/g, "");
+      html = html.replace(/\t/g, "");
+  sendDataRequest('/save', filepath, html);
 }
 
 //sending request in server
@@ -550,7 +551,7 @@ function checkSaveRequest(url,filename) {
             window.scrollTo(0, 0);
             window.addEventListener('scroll', onScroll);
             // localstorage
-            let prevchap = json.filename.split('__')[2].split('.')[0];
+            let prevchap = json.filename.split('__')[2].split('-')[0];
             let gazd = document.getElementById('GAZD').value;
             let gazn = document.getElementById('GAZN').value;
             let gazp = document.getElementById('GAZP').value;

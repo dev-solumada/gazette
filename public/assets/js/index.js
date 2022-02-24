@@ -377,6 +377,7 @@ function downloadXML() {
       }
     }).then( val => {
       if(val) {
+        backupData();
         // country
         let GAZC = localStorage.getItem('GAZC');
         // chapter
@@ -393,14 +394,13 @@ function downloadXML() {
         else{
           download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
           sendRequest("/download",pdf_name);
-        } 
-
-        showWarnings();
+        }
       }
     });
   }
   // si tous ont été validés
   else {
+    backupData();
     // country
     let GAZC = localStorage.getItem('GAZC');
     // chapter
@@ -418,8 +418,8 @@ function downloadXML() {
       download(document.forms[0], `${GAZC}_${GAZD}_${GAZN}`);
       sendRequest("/download",pdf_name);
     }
-    showWarnings();
   } 
+  showWarnings();
 }
 //sending request in server
 function sendRequest(url,filename) {
