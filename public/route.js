@@ -31,15 +31,20 @@ routeExp.route("/").get(function (req, res) {
   // lire les fichie
   var saveList = [];
   var fs = require("fs");
+  fs.mkdir('saves', { recursive: true }, (err) => {
+    if (err) throw err;
+  });
   fs.readdirSync('saves').forEach(function(file) {
-    let d = file.split('-')[1].split('.')[0];
-    let filedate = new Date(parseInt(d));
-    let datenow = new Date(Date.now());
-    let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
-    var diffDays = timeDiff / (1000 * 3600 * 24); 
-    // supprimer le fichier après un jour
-    if (diffDays > 121) {
-      fs.unlinkSync('saves/'+file);
+    if (file.includes('.gs')) {
+      let d = file.split('-')[1].split('.')[0];
+      let filedate = new Date(parseInt(d));
+      let datenow = new Date(Date.now());
+      let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
+      var diffDays = timeDiff / (1000 * 3600 * 24); 
+      // supprimer le fichier après un jour
+      if (diffDays > 121) {
+        fs.unlinkSync('saves/'+file);
+      }
     }
   });
 
