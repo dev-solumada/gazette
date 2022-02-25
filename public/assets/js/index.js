@@ -1,4 +1,3 @@
-
 function openFile(file) {
   var f = new XMLHttpRequest();
   f.open("GET", file, false);
@@ -13,7 +12,12 @@ function openFile(file) {
   }
   f.send(null);
 }
-
+// fonction pour afficher le sauvegarde
+function displaySave(file = {}) {
+  document.getElementById('left-page').innerHTML = file.data;
+  localStorage.setItem('file_saved', file.filename)
+  window.scrollTo(0, 0);
+}
 
 // dernier forme sur la page
 function getLastForm() {
@@ -25,12 +29,15 @@ function getLastForm() {
  */
  var img = document.getElementById("pdf");
  function uploadPDF(){
-    document.getElementById("show").setAttribute("data",URL.createObjectURL(img.files[0]));
+  const inputFile = document.getElementById("pdf");
+  if (inputFile.files.length === 1) {
+    document.getElementById("show").setAttribute("data",URL.createObjectURL(inputFile.files[0]));
     document.getElementById("show").setAttribute("style", 'width:100% !important;height: 100vh !important;zoom: 0% !important;');
     // verification du sauvegarde
     const filename = img.files[0].name.split('.')[0];
     localStorage.setItem('pdf_name', filename);
     checkSaveRequest('/checksave', filename);
+  }
  }
 
 
@@ -377,7 +384,6 @@ function downloadXML() {
       }
     }).then( val => {
       if(val) {
-        backupData();
         // country
         let GAZC = localStorage.getItem('GAZC');
         // chapter
@@ -400,7 +406,6 @@ function downloadXML() {
   }
   // si tous ont été validés
   else {
-    backupData();
     // country
     let GAZC = localStorage.getItem('GAZC');
     // chapter
@@ -434,7 +439,7 @@ function sendRequest(url,filename) {
       let json = JSON.parse(this.responseText);
       if (json.status === 1) {
         window.onbeforeunload = function() {};
-        window.location = "/";
+        backupData(true);
       }
     }
   };
@@ -478,4 +483,9 @@ function onScroll() {
     // remove padding top from body
     document.body.style.paddingTop = '0';
   }
+}
+
+function autogrow(o) {
+  o.style.height = '1px'; // Prevent height from growing when deleting lines.
+  o.style.height = o.scrollHeight + 'px';
 }

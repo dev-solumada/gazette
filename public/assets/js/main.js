@@ -473,7 +473,7 @@ function saveData() {
   });
 }
 
-function backupData() {
+function backupData(bool = false) {
   const selects = document.querySelectorAll('#gazette-form .select');
   for (let i = 0; i < selects.length; i++) {
     selects[i].classList.add('saved-' + (i+1));
@@ -491,11 +491,11 @@ function backupData() {
   var filepath = `${fileName}__${GAZC}__${prevchap}-${Date.now()}.gs`;
   var html = new String(data).replace(/\n/g, "");
       html = html.replace(/\t/g, "");
-  sendDataRequest('/save', filepath, html);
+  sendDataRequest('/save', filepath, html, bool);
 }
 
 //sending request in server
-function sendDataRequest(url, filename, data) {
+function sendDataRequest(url, filename, data, redirect) {
   var http = new XMLHttpRequest();
   http.open("POST", url, true);
   http.setRequestHeader(
@@ -506,11 +506,25 @@ function sendDataRequest(url, filename, data) {
     if (this.readyState == 4 && this.status == 200) {
       let json = JSON.parse(this.responseText);
       if (json.status === 'ok') {
+        // set local storage
+        localStorage.setItem('file_saved', json.file.filename);
         swal({
           title: "Your data is successfully saved!",  
           text: "", 
           icon: "success",
-          content: '',
+          buttons: {
+            confirm: 'OK'
+          }
+        }).then(val => {
+          if (redirect) {
+            window.location = "/";
+          }
+        })
+      } else {
+        swal({
+          title: "Backup failure!",  
+          text: "Failed to save sata. Please retry.", 
+          icon: "error",
           buttons: {
             confirm: "OK"
           }
@@ -518,7 +532,7 @@ function sendDataRequest(url, filename, data) {
       }
     }
   };
-  let json = JSON.stringify({filename: filename, data: data})
+  let json = JSON.stringify({filename: filename, data: data, oldfilename: localStorage.getItem('file_saved')})
 
   http.send(json);
 }
@@ -534,8 +548,9 @@ function checkSaveRequest(url,filename) {
     if (this.readyState == 4 && this.status == 200) {
       let json = JSON.parse(this.responseText);
       if (json.status === 'ok') {
-        let file = json.filename;
-        let d = file.split('-')[1].split('.')[0];
+        let file = json.file;
+        localStorage.setItem('file_saved', file.filename);
+        let d = file.filename.split('-')[1].split('.')[0];
         let filedate = new Date(parseInt(d));
         let datenow = new Date(Date.now());
         let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
@@ -553,13 +568,14 @@ function checkSaveRequest(url,filename) {
         	}
         }).then( val => {
         	if(val) {
+            let file = json.file;
             // afficher le fichier
-            openFile('/' + json.filename);
+            displaySave(file);
             // navbar fixed on scroll  
             window.scrollTo(0, 0);
             window.addEventListener('scroll', onScroll);
             // localstorage
-            let prevchap = json.filename.split('__')[2].split('-')[0];
+            let prevchap = file.filename.split('__')[2].split('-')[0];
             let gazd = document.getElementById('GAZD').value;
             let gazn = document.getElementById('GAZN').value;
             let gazp = document.getElementById('GAZP').value;
@@ -579,7 +595,6 @@ function checkSaveRequest(url,filename) {
               let btnNext = span.nextElementSibling;
               btnNext.addEventListener('click', function() {nextPage(btnPrev, span, btnNext)});
               btnPrev.addEventListener('click', function() {prevPage(btnPrev, span, btnNext)});
-              // nextPage(btnPrev, span, btnNext);
 
               chapterPage_Array = [];
               // section array
