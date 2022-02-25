@@ -1,10 +1,5 @@
-const tableScript = () => {
-// document.getElementById("app_add").style.visibility = "hidden";
-// document.getElementById("appagt_add").style.visibility = "hidden";
-// document.getElementById("appnice_add").style.visibility = "hidden";
-}
-
-
+const tableScript = () => {}
+const LINE_LIMIT = 5;
 let number_trapp=1;
 let number_trowner=1;
 let number_trpowner=1;
@@ -38,9 +33,9 @@ function addelementapp(e){
     let parentElement2 = document.getElementsByName('731-address')[0];
     let parentElement3 = document.getElementsByName('731-country')[0];
     if (parentElement1.hasAttribute('disabled') && parentElement2.hasAttribute('disabled') && parentElement3.hasAttribute('disabled')) return;
-    if (table.rows.length - 1 < 5) {
+    if (table.rows.length - 1 < LINE_LIMIT) {
         let step =0;
-        let apllicant = table.lastElementChild;
+        let tableTbody = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trapp"+number_trapp);
         while(step <= 3 ){
@@ -73,7 +68,7 @@ function addelementapp(e){
                 elementinput.setAttribute("class", 'select');
                 elementtdname.appendChild(elementinput);
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
             else{
                 let elementtdname = document.createElement("td");
@@ -86,12 +81,13 @@ function addelementapp(e){
                 elementtdname.appendChild(elementimg);
                 elementtdname.setAttribute("align","center")
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
         
         step++;
     }
     number_trapp++;
+    tableTbody.lastElementChild.firstElementChild.firstElementChild.focus();
     }
     callScripts(); // method from main.js
 }
@@ -102,9 +98,9 @@ function addelementowner(e){
     let parentElement2 = document.getElementsByName('732-address')[0];
     let parentElement3 = document.getElementsByName('732-country')[0];
     if (parentElement1.hasAttribute('disabled') && parentElement2.hasAttribute('disabled') && parentElement3.hasAttribute('disabled')) return;
-    if (table.rows.length - 1 < 5){
+    if (table.rows.length - 1 < LINE_LIMIT){
         let step =0;
-        let apllicant = table.lastElementChild;
+        let tableTbody = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trowner"+number_trowner);
         while(step <= 3 ){
@@ -137,7 +133,7 @@ function addelementowner(e){
                 elementinput.setAttribute("class", 'select');
                 elementtdname.appendChild(elementinput);
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
             else{
                 let elementtdname = document.createElement("td");
@@ -150,12 +146,13 @@ function addelementowner(e){
                 elementtdname.appendChild(elementimg);
                 elementtdname.setAttribute("align","center")
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
         
         step++;
     }
     number_trowner++;
+    tableTbody.lastElementChild.firstElementChild.firstElementChild.focus();
     }
     callScripts(); // method from main.js
 }
@@ -166,9 +163,9 @@ function addelementpowner(e){
     let parentElement2 = document.getElementsByName('770-address')[0];
     let parentElement3 = document.getElementsByName('770-country')[0];
     if (parentElement1.hasAttribute('disabled') && parentElement2.hasAttribute('disabled') && parentElement3.hasAttribute('disabled')) return;
-    if (table.rows.length - 1 < 5){
+    if (table.rows.length - 1 < LINE_LIMIT){
         let step =0;
-        let apllicant = table.lastElementChild;
+        let tableTbody = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trpowner"+number_trpowner);
         while(step <= 3 ){
@@ -201,7 +198,7 @@ function addelementpowner(e){
                 elementinput.setAttribute("class", 'select');
                 elementtdname.appendChild(elementinput);
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
             else{
                 let elementtdname = document.createElement("td");
@@ -214,12 +211,13 @@ function addelementpowner(e){
                 elementtdname.appendChild(elementimg);
                 elementtdname.setAttribute("align","center")
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
         
         step++;
     }
     number_trpowner++;
+    tableTbody.lastElementChild.firstElementChild.firstElementChild.focus();
     }
     callScripts(); // method from main.js
 }
@@ -230,8 +228,8 @@ function addelementagt(e){
     let parent740addres = document.getElementsByName('740-address')[0];
     let parent740country = document.getElementsByName('740-country')[0];
     if (parent740name.hasAttribute('disabled') && parent740addres.hasAttribute('disabled') && parent740country.hasAttribute('disabled') ) return;
-    if (table.rows.length - 1 < 5){
-        var apllicant = table.lastElementChild;
+    if (table.rows.length - 1 < LINE_LIMIT){
+        var tableTbody = table.lastElementChild;
         function field(name){
             let elementtdname = document.createElement("td");
             let elementinput = document.createElement("input");
@@ -244,21 +242,21 @@ function addelementagt(e){
             }
             elementtdname.appendChild(elementinput);
             elementtr.appendChild(elementtdname);
-            apllicant.appendChild(elementtr);
+            tableTbody.appendChild(elementtr);
         }
         let step =0;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","tragt"+number_tragt);
         while(step <= 3 ){
-                if (step === 0){
-                    field("740-name");
-                }
-                else if (step === 1){
-                    field("740-address");
-                }
-                else if (step === 2){
-                    field("740-country");
-                }
+            if (step === 0){
+                field("740-name");
+            }
+            else if (step === 1){
+                field("740-address");
+            }
+            else if (step === 2){
+                field("740-country");
+            }
             else{
                 let elementtdname = document.createElement("td");
                 let elementimg = document.createElement("img");
@@ -270,42 +268,43 @@ function addelementagt(e){
                 elementtdname.appendChild(elementimg);
                 elementtdname.setAttribute("align","center")
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
-        step++;
+            step++;
         }
         number_tragt++;
+        tableTbody.lastElementChild.firstElementChild.firstElementChild.focus();
     }
     callScripts(); // method from main.js
 }
 function addelementnice(e){
     const table = e.parentElement.parentElement.nextElementSibling;
-    if (table.rows.length - 1 < 5){
+    // if (table.rows.length - 1 < LINE_LIMIT){
         let step =0;
-        let apllicant = table.lastElementChild;
+        let tableTbody = table.lastElementChild;
         let elementtr = document.createElement("tr");
         elementtr.setAttribute("id","trapp"+number_trnice);
         while(step <= 2 ){
             if (step === 0){
                 let elementtdname = document.createElement("td");
-                    let elementinput = document.createElement("input");
-                    // desactiver le champ
-                    const firstInput = document.getElementById('511');
-                    if (firstInput) {
-                        if (firstInput.disabled)
-                            elementinput.setAttribute("disabled",true);
-                        else elementinput.setAttribute("class","select");
-                    }
-                    elementinput.setAttribute("name","511");
-                    elementinput.setAttribute("id","511");
-                    elementinput.setAttribute("min","0");
-                    elementinput.setAttribute("max","45");
-                    elementinput.setAttribute("value","0");
-                    elementinput.setAttribute("type","number");
-                    elementinput.setAttribute("onchange","check511Value(this)");
-                    elementtdname.appendChild(elementinput);
-                    elementtr.appendChild(elementtdname);
-                    apllicant.appendChild(elementtr);
+                let elementinput = document.createElement("input");
+                // desactiver le champ
+                const firstInput = document.getElementById('511');
+                if (firstInput) {
+                    if (firstInput.disabled)
+                        elementinput.setAttribute("disabled",true);
+                    else elementinput.setAttribute("class","select");
+                }
+                elementinput.setAttribute("name","511");
+                elementinput.setAttribute("id","511");
+                elementinput.setAttribute("min","0");
+                elementinput.setAttribute("max","45");
+                // elementinput.setAttribute("value","0");
+                elementinput.setAttribute("type","number");
+                elementinput.setAttribute("onchange","check511Value(this)");
+                elementtdname.appendChild(elementinput);
+                elementtr.appendChild(elementtdname);
+                tableTbody.appendChild(elementtr);
             }
             else if (step === 1){
                 let elementtdname = document.createElement("td");
@@ -321,9 +320,10 @@ function addelementnice(e){
                 elementinput.setAttribute("id","510");
                 elementinput.setAttribute("cols","30");
                 elementinput.setAttribute("rows","1");
+                elementinput.setAttribute("onkeyup","autogrow(this)");
                 elementtdname.appendChild(elementinput);
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
             else{
                 let elementtdname = document.createElement("td");
@@ -336,11 +336,11 @@ function addelementnice(e){
                 elementtdname.appendChild(elementimg);
                 elementtdname.setAttribute("align","center")
                 elementtr.appendChild(elementtdname);
-                apllicant.appendChild(elementtr);
+                tableTbody.appendChild(elementtr);
             }
-        
+            tableTbody.lastElementChild.firstElementChild.firstElementChild.focus();
         step++;
-    }
+    // }
     number_trnice++;
     
     }

@@ -77,6 +77,7 @@
 		window.onbeforeunload = function(e) {
 			return "Do you want to exit this page?";
 		};
+		
 		localStorage.clear();
 		var indice = 0;
 		var fileversion = "<%= version %>".split(",");

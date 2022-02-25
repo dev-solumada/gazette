@@ -40,8 +40,10 @@ function addPage(page = document.createElement('div')) {
         }
     }
     for (let input of page.getElementsByClassName('select')) {
-        if (input.type === 'textarea') 
+        if (input.type === 'textarea')  {
             input.textContent = '';
+            input.style.height = "auto";
+        }
         else
             input.setAttribute('value', '');
     }

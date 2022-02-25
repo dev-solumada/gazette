@@ -257,9 +257,9 @@
 							<tbody id="apllicant-nice">
 								<tr>
 									<!-- The International Classification of Goods and Services /Nice Classification) and/or list of goods and/or services classified according thereto (number between 0 and 45) -->
-									<td><input class="select" type="number" name="511" id="511" min="0" max="45" value="0" onkeyup="fieldemptynice('511','510','appnice_add')" onchange="check511Value(this)"></td>
+									<td><input class="select" type="number" name="511" id="511" min="0" max="45" value="" onkeyup="fieldemptynice('511','510','appnice_add')" onchange="check511Value(this)"></td>
 									<!-- List of goods and/or services, if not classified * (text long) -->
-									<td><textarea class="select" name="510" id="510" cols="30"  onkeyup="fieldemptynice('511','510','appnice_add')" rows="1"></textarea></td>
+									<td><textarea class="select" onkeyup="autogrow(this)" name="510" id="510" cols="30"  onkeyup="fieldemptynice('511','510','appnice_add')" rows="1"></textarea></td>
 									<td class="col-btn" align="center">
 										<img src="../assets/images/Delete-icon.png" class="btn" alt="..." width="24" height="24">
 									</td>
@@ -337,7 +337,7 @@
 					<fieldset>
 						<legend><label for="571"><strong>571</strong> Description </label></legend>
 						<!-- Description of mark (text) -->
-						<textarea class="select" name="571" id="571" rows="2"></textarea>
+						<textarea class="select" onkeyup="autogrow(this)" name="571" id="571" rows="2"></textarea>
 					</fieldset>
 				</div>
 			</div>

@@ -13,7 +13,7 @@ app.use(methodOverride("_method"));
 
 // Fichier static a utiliser
 app.use(express.static("public"));
-app.use(express.static('saves'));
+app.use(express.static('public/saves'));
 app.use(express.static('public/assets/css'));
 app.use(express.static('public/assets/js'));
 app.use(express.static('public/assets/images'));
