@@ -13,7 +13,6 @@ var fullname = "";
 const MONGOOSE_URL = "mongodb+srv://solumada:vbcFPNKhZk0vcpfI@cluster0.t0vx8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 routeExp.route("/").get(function (req, res) {
   // lire les fichie
-  var deleted_files_count = 0;
   var saveList = [];
   mongoose
     .connect(
@@ -34,7 +33,6 @@ routeExp.route("/").get(function (req, res) {
         // supprimer le fichier après 121 jours ou 4 mois
         if (diffDays > 121) {
           await new SaveSchema(save).delete();
-          deleted_files++;
         }
       })
     }).catch(e => {
@@ -42,7 +40,7 @@ routeExp.route("/").get(function (req, res) {
     }).finally(() => {
       
     });
-    res.render("home.html",{dones : [], version: "null", bdfls: "null", saves: saveList, deleted_files: deleted_files_count});
+    res.render("home.html",{dones : [], version: "null", bdfls: "null", saves: saveList});
 });
 
 routeExp.route("/download").post(function (req, res) {
