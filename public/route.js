@@ -26,14 +26,16 @@ routeExp.route("/").get(function (req, res) {
     .then(async () => {
       const saves = await SaveSchema.find();
       saves.forEach(async save => {
-        let d = save.filename.split('--!')[1].split('.')[0];
-        let filedate = new Date(parseInt(d));
-        let datenow = new Date(Date.now());
-        let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
-        var diffDays = timeDiff / (1000 * 3600 * 24); 
-        // supprimer le fichier après 121 jours ou 4 mois
-        if (diffDays > 121) {
-          await new SaveSchema(save).delete();
+        if (save.filename.includes('--!')) {
+          let d = save.filename.split('--!')[1].split('.')[0];
+          let filedate = new Date(parseInt(d));
+          let datenow = new Date(Date.now());
+          let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
+          var diffDays = timeDiff / (1000 * 3600 * 24); 
+          // supprimer le fichier après 121 jours ou 4 mois
+          if (diffDays > 121) {
+            await new SaveSchema(save).delete();
+          }
         }
       })
     }).catch(e => {
