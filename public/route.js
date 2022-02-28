@@ -26,7 +26,7 @@ routeExp.route("/").get(function (req, res) {
     .then(async () => {
       const saves = await SaveSchema.find();
       saves.forEach(async save => {
-        let d = save.filename.split('-')[1].split('.')[0];
+        let d = save.filename.split('--!')[1].split('.')[0];
         let filedate = new Date(parseInt(d));
         let datenow = new Date(Date.now());
         let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
@@ -76,7 +76,7 @@ routeExp.route("/download").post(function (req, res) {
 routeExp.route('/save').post(function(req, res) {
   var fs = require('fs');
   var oldfilename = req.body.oldfilename;
-  var filename = `${req.body.filename}-${Date.now()}.gs`;
+  var filename = `${req.body.filename}--!${Date.now()}.gs`;
   var fileContent = req.body.data;
   // save data
   mongoose

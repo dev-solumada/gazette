@@ -6,25 +6,8 @@ let number_trpowner=1;
 let number_tragt=1;
 let number_trnice=1;
 function fieldempty(f1,f2,f3,app){
-    f1 = document.getElementById(f1);
-    f2 = document.getElementById(f2);
-    f3 = document.getElementById(f3);
-    if (f1.value == "" || f2.value == "" || f3.value == ""){
-        document.getElementById(app).style.visibility = "hidden";
-    }
-    else{
-        document.getElementById(app).style.visibility = "visible";
-    }
 }
 function fieldemptynice(f1,f2,app){
-    f1 = document.getElementById(f1);
-    f2 = document.getElementById(f2);
-    if (f1.value == 0 || f2.value == ""){
-        document.getElementById(app).style.visibility = "hidden";
-    }
-    else{
-        document.getElementById(app).style.visibility = "visible";
-    }
 }
 
 function addelementapp(e){

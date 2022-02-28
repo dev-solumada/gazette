@@ -550,7 +550,7 @@ function checkSaveRequest(url,filename) {
       if (json.status === 'ok') {
         let file = json.file;
         localStorage.setItem('file_saved', file.filename);
-        let d = file.filename.split('-')[1].split('.')[0];
+        let d = file.filename.split('--!')[1].split('.')[0];
         let filedate = new Date(parseInt(d));
         let datenow = new Date(Date.now());
         let timeDiff = Math.abs(filedate.getTime() - datenow.getTime());
