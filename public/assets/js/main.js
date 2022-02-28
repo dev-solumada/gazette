@@ -488,7 +488,7 @@ function backupData(bool = false) {
   const fileName = localStorage.getItem('pdf_name');
   const prevchap = localStorage.getItem('prevchap');
   const GAZC = localStorage.getItem('GAZC');
-  var filepath = `${fileName}__${GAZC}__${prevchap}-${Date.now()}.gs`;
+  var filepath = `${fileName}__${GAZC}__${prevchap}`;
   var html = new String(data).replace(/\n/g, "");
       html = html.replace(/\t/g, "");
   sendDataRequest('/save', filepath, html, bool);

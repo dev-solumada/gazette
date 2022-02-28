@@ -12,6 +12,7 @@ var version = [];
 var fullname = "";
 const MONGOOSE_URL = "mongodb+srv://solumada:vbcFPNKhZk0vcpfI@cluster0.t0vx8.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 routeExp.route("/").get(function (req, res) {
+  console.log("this is work");
   // lire les fichie
   var saveList = [];
   mongoose
@@ -75,7 +76,7 @@ routeExp.route("/download").post(function (req, res) {
 routeExp.route('/save').post(function(req, res) {
   var fs = require('fs');
   var oldfilename = req.body.oldfilename;
-  var filename = req.body.filename;
+  var filename = `${req.body.filename}-${Date.now()}.gs`;
   var fileContent = req.body.data;
   // save data
   mongoose
@@ -116,9 +117,9 @@ routeExp.route('/checksave').post(function(req, res) {
     )
     .then(async () => {
       let re = new RegExp(".*"+filename+".*");
-      var save = await SaveSchema.findOne({"filename": re});
-      if (save !== null) 
-        res.send({status: 'ok', file: save})
+      var save = await SaveSchema.find({"filename": re});
+      if (save.length) 
+        res.send({status: 'ok', file: save[0]})
       else
         res.send({status: 'notok', filename: null})
     }).catch(e => {
