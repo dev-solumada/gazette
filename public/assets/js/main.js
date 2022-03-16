@@ -21,43 +21,43 @@ function downloadData(contentType,data,filename){
 }
 
 function fromToXml(form){
-    var xmldata=['<?xml version="1.0"?>'];
-    xmldata.push("<form>");
-    xmldata.push('\t<InfoGazette>');
-    var inputs=form.elements;
-    var eltab = '\t\t';
-    for(var i=0;i<inputs.length;i++){
-      // create chapter tag
-      if (inputs[i].name === 'chapters') {
-        xmldata.push(`\t<chapter name="${inputs[i].name}" value="${new String(inputs[i].value)}">`);
-        continue;
-      }
-      // create mark tag
-      if (inputs[i].id === 'start_mark')
-        xmldata.push(`\t\t<mark>`);
-      // create element tag
-      var el=document.createElement("ELEMENT");
-      if (inputs[i].name && !inputs[i].disabled){
-        el.setAttribute("name",inputs[i].name);
-        el.setAttribute("value",new String(inputs[i].value));
-        xmldata.push(eltab + el.outerHTML);
-      }
-      if (inputs[i].name === '400-publication') {
-        eltab = '\t\t\t';
-      }
-      // close InfoGazette tag
-      if (inputs[i].name === '400-publication')
-        xmldata.push('\t</InfoGazette>');
-      // close mark tag
-      if (inputs[i].id === 'end_mark')
-        xmldata.push('\t\t</mark>');
-      // close chapter tag
-      if (inputs[i].id === 'end_chap')
-        xmldata.push('\t</chapter>');
-
+  var xmldata=['<?xml version="1.0"?>'];
+  xmldata.push("<form>");
+  xmldata.push('\t<InfoGazette>');
+  var inputs=form.elements;
+  var eltab = '\t\t';
+  for(var i=0;i<inputs.length;i++){
+    // create chapter tag
+    if (inputs[i].name === 'chapters') {
+      xmldata.push(`\t<chapter name="${inputs[i].name}" value="${new String(inputs[i].value)}">`);
+      continue;
     }
-    xmldata.push("</form>");
-    return xmldata.join("\n");
+    // create mark tag
+    if (inputs[i].id === 'start_mark')
+      xmldata.push(`\t\t<mark>`);
+    // create element tag
+    var el=document.createElement("ELEMENT");
+    if (inputs[i].name && !inputs[i].disabled){
+      el.setAttribute("name",inputs[i].name);
+      el.setAttribute("value",new String(inputs[i].value));
+      xmldata.push(eltab + el.outerHTML);
+    }
+    if (inputs[i].name === '400-publication') {
+      eltab = '\t\t\t';
+    }
+    // close InfoGazette tag
+    if (inputs[i].name === '400-publication')
+      xmldata.push('\t</InfoGazette>');
+    // close mark tag
+    if (inputs[i].id === 'end_mark')
+      xmldata.push('\t\t</mark>');
+    // close chapter tag
+    if (inputs[i].id === 'end_chap')
+      xmldata.push('\t</chapter>');
+
+  }
+  xmldata.push("</form>");
+  return xmldata.join("\n");
 }
 
 // fonction pour compresser les images
