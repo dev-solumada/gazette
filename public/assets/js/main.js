@@ -9,8 +9,14 @@ var xmldata=['<?xml version="1.0"?>'];
  * @param {*} filename 
  */
 function downloadData(contentType,data,filename){
+    // console.log(StringToXML(data)); 
+    let file = new File([data] 
+               , "xmlfile.xml", {type:"application/xml"}); 
+     
+    let url = URL.createObjectURL(file); 
+    console.log(encodeURI("data:"+contentType+","+data));
     var link=document.createElement("A");
-    link.setAttribute("href",encodeURI("data:"+contentType+","+data));
+    link.setAttribute("href", url);
     link.setAttribute("style","display:none");
     link.setAttribute("download",filename);
     document.body.appendChild(link);                                                        //needed for firefox
@@ -19,9 +25,20 @@ function downloadData(contentType,data,filename){
       document.body.removeChild(link);
     },1000);
 }
+function StringToXML(oString) {
+  //code for IE
+  if (window.ActiveXObject) { 
+  var oXML = new ActiveXObject("Microsoft.XMLDOM"); oXML.loadXML(oString);
+  return oXML;
+  }
+  // code for Chrome, Safari, Firefox, Opera, etc. 
+  else {
+  return (new DOMParser()).parseFromString(oString, "text/xml");
+  }
+ }
 
 function fromToXml(form){
-  var xmldata=['<?xml version="1.0"?>'];
+  var xmldata=['<?xml version="1.0" encoding="UTF-8" ?>'];
   xmldata.push("<form>");
   xmldata.push('\t<InfoGazette>');
   var inputs=form.elements;
@@ -39,7 +56,7 @@ function fromToXml(form){
     var el=document.createElement("ELEMENT");
     if (inputs[i].name && !inputs[i].disabled){
       el.setAttribute("name",inputs[i].name);
-      el.setAttribute("value",new String(inputs[i].value));
+      el.setAttribute("value", new String(inputs[i].value));
       xmldata.push(eltab + el.outerHTML);
     }
     if (inputs[i].name === '400-publication') {
