@@ -1,3 +1,4 @@
+
 function openFile(file) {
   var f = new XMLHttpRequest();
   f.open("GET", file, false);
@@ -146,6 +147,14 @@ function getPage2Values() {
   // navbar fixed on scroll  
   window.addEventListener('scroll', onScroll);
 
+  // saveData
+  window.addEventListener('keyup', ( e) => {
+    if (e.keyCode === 120) backupData();
+  })
+
+  window.addEventListener('keydown', e => {
+    console.log(e.wich);
+  })
   var chap = document.getElementById("chapitre").value;
   // local storage variables
   localStorage.setItem('chap', chap);
@@ -463,7 +472,7 @@ function cancel() {
   .then((willDelete) => {
     if (willDelete) {
       window.onbeforeunload = function() {};
-      window.location.href = '/';
+      // window.location.href = '/';
     } else {
       swal("Your data is safe!");
     }
