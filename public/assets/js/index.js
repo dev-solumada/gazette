@@ -148,7 +148,7 @@ function getPage2Values() {
   // F9 auto save
   window.addEventListener('keyup', (e) => {
     if(e.keyCode == 120 || e.which === 120)
-    backupData(true);
+    backupData();
   })
 
   var chap = document.getElementById("chapitre").value;

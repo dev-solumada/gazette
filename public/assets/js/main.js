@@ -594,7 +594,7 @@ function checkSaveRequest(url,filename) {
             // F9 auto save
             window.addEventListener('keyup', (e) => {
               if(e.keyCode == 120 || e.which === 120)
-              backupData(true);
+              backupData();
             })
             // localstorage
             let prevchap = file.filename.split('__')[2].split('-')[0];
