@@ -591,6 +591,11 @@ function checkSaveRequest(url,filename) {
             // navbar fixed on scroll  
             window.scrollTo(0, 0);
             window.addEventListener('scroll', onScroll);
+            // F9 auto save
+            window.addEventListener('keyup', (e) => {
+              if(e.keyCode == 120 || e.which === 120)
+              backupData();
+            })
             // localstorage
             let prevchap = file.filename.split('__')[2].split('-')[0];
             let gazd = document.getElementById('GAZD').value;
