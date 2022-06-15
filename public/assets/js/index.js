@@ -244,6 +244,13 @@ function getPage2Values() {
   })
 
   showFinishedChapter();
+  
+  // F9 auto save
+  window.addEventListener('keyup', (e) => {
+    if(e.keyCode == 120 || e.which === 120)
+    backupData(true);
+  })
+
 }
 
 // action sur choisir nextchapter
