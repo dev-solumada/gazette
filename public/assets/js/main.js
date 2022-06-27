@@ -345,6 +345,7 @@ function getAvailableChapter(country) {
     obj['Application'] = ['APP'];
     obj['Changes/Corrections/Cancellation'] = ['ADD', 'TRA', 'CAN'];
     obj['Renewal'] = ['REN'];
+    obj['Registration'] = ['REG'];
       break;
     case 'MS': // for MS
     obj['Application'] = ['APP'];
