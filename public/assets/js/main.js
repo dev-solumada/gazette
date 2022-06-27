@@ -331,11 +331,11 @@ function getAvailableChapter(country) {
       break;
     case 'TN': // for TN
     obj['Application'] = ['APP_T','APP_M', 'APP_E'];
-    obj['Changes/Corrrections/Concelations'] = ['COR'];
+    obj['Changes/Corrections/Cancellation'] = ['COR'];
     obj['Renewal'] = ['REN'];
       break;
     case 'MG': // for MG
-    obj['Changes/Corrrections/Concelations'] = ['COM'];
+    obj['Changes/Corrections/Cancellation'] = ['COM'];
     obj['Registration'] = ['REG', 'REG_M'];
       break;
     case 'MM': // for MM
@@ -343,12 +343,12 @@ function getAvailableChapter(country) {
       break;
     case 'TRNC': // for TRNC
     obj['Application'] = ['APP'];
-    obj['Changes/Corrrections/Concelations'] = ['ADD', 'TRA', 'CAN'];
+    obj['Changes/Corrections/Cancellation'] = ['ADD', 'TRA', 'CAN'];
     obj['Renewal'] = ['REN'];
       break;
     case 'MS': // for MS
     obj['Application'] = ['APP'];
-    obj['Changes/Corrrections/Concelations'] = ['CAN', 'COR', 'RES'];
+    obj['Changes/Corrections/Cancellation'] = ['CAN', 'COR', 'RES'];
     obj['Registration'] = ['REG'];
     obj['Renewal'] = ['REN'];
       break;
@@ -357,7 +357,7 @@ function getAvailableChapter(country) {
       break;
     case 'LS': // for LS
     obj['Application'] = ['APP'];
-    obj['Changes/Corrrections/Concelations'] = ['ASS', 'MER', 'RUSER', 'ADD'];
+    obj['Changes/Corrections/Cancellation'] = ['ASS', 'MER', 'RUSER', 'ADD'];
     obj['Registration'] = ['REG'];
     obj['Renewal'] = ['REN'];
       break;
